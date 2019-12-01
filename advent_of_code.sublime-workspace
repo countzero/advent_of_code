@@ -1,0 +1,349 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Labe",
+				"LabeledError〔variable〕"
+			],
+			[
+				"La",
+				"LabeledError"
+			],
+			[
+				"Op",
+				"OpenLDAPClient"
+			],
+			[
+				"Acti",
+				"ActiveDirectoryUserPasswordController"
+			],
+			[
+				"isntance",
+				"instanceId"
+			],
+			[
+				"instan",
+				"instanceId〔variable〕"
+			],
+			[
+				"inst",
+				"instanceId〔variable〕"
+			],
+			[
+				"instance",
+				"instanceId"
+			],
+			[
+				"data",
+				"dataTableModel"
+			],
+			[
+				"recurs",
+				"recursivelyFindFilePathsInDirectories"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 187.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/R/Daten/Privat/Projekte/advent_of_code"
+	],
+	"file_history":
+	[
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/update_one_company.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/schema/0009.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/find_all_professor_doctors.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/package.json",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/find_all_persons_that_are_older_than_fifty.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/select_one_person_simple.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/select_first_ten_persons_detailed.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/select_one_company.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/company/sql/0001_insert_legal_form.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/company/sql/0002_insert_companies.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/api/develop/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/database/controller.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/database/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/Vagrantfile",
+		"/R/Daten/Arbeit/learning_postgresql/shared/tools/bootstrap.bash",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/0004_insert_person_name_affixes.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/0003_insert_random_persons.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/0002_insert_genders.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/0001_insert_salutations.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/api/install/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/infrastructure/provisioning/debian/puppet/modules/common/manifests/init.pp",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/nodemon.json",
+		"/R/Daten/Arbeit/learning_postgresql/shared/tools/startup_status.bash",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/schema/0002.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/image/sql/insert_random_images.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/config.json",
+		"/R/Daten/Arbeit/learning_postgresql/infrastructure/provisioning/debian/puppet/modules/postgresql/files/postgresql.conf",
+		"/R/Daten/Arbeit/learning_postgresql/infrastructure/provisioning/debian/puppet/modules/postgresql/manifests/init.pp",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/select_first_hundred_persons.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/schema/0001.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/generator.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/controller.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/helper/sql_functions.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/image/generator.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/helper/sql/random_text.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/helper/sql/enable_pgrcrypto_extension.sql",
+		"/R/Daten/Arbeit/learning_postgresql/README.md",
+		"/R/Daten/Arbeit/learning_postgresql/CHANGELOG.md",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/controller.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/library/read_files.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/library/read_file.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/error_handler/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/api/benchmark/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/api/populate/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/index.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/insert_person_name_affixes.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/schema/controller.js",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/insert_random_persons.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/insert_salutations.sql",
+		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/test_data/person/sql/insert_genders.sql",
+		"/R/Daten/Arbeit/learning_postgresql/learning_postgresql.sublime-workspace",
+		"/R/Daten/Arbeit/learning_postgresql/learning_postgresql.sublime-project",
+		"/E/SILENT.cmd",
+		"/C/Users/Finn Kumkar/.ssh/config",
+		"/O/Common/SSH/.ssh/take_back_ownership.ps1",
+		"/R/µtorrent/Downloads/DOOM [2016][MULTI][FitGirl IDKFA Repack]/INFO README PROAC/INFO README PROAC.rtf",
+		"/R/µtorrent/Downloads/DOOM [2016][MULTI][FitGirl IDKFA Repack]/Verify BIN files before installation.bat",
+		"/O/Common/SSH/.ssh/config",
+		"/Z/company_communication_core/shared/development/image/server/linotp/provisioning/puppet/modules/linotp/files/linotp.ini",
+		"/Z/company_communication_core/shared/development/image/server/linotp/provisioning/puppet/modules/linotp/files/populate_linotp.bash",
+		"/Z/company_communication_core/infrastructure/provisioning/windows/puppet/modules/active_directory/manifests/populate.pp",
+		"/Z/company_communication_core/application/server/api/oauth/model/oauth/oauth.js",
+		"/Z/company_communication_core/application/client/common/library/authentication/oauth2.js",
+		"/Z/company_communication_core/application/server/library/directory_service/openldap/client.js",
+		"/Z/company_communication_core/application/server/api/oauth/error_handler.js",
+		"/Z/company_communication_core/Vagrantfile",
+		"/Z/company_communication_core/infrastructure/provisioning/windows/puppet/modules/active_directory/manifests/install.pp",
+		"/Z/company_communication_core/shared/development/image/server/linotp/provisioning/puppet/modules/linotp/files/insecure_token_qr_code.svg",
+		"/Z/company_communication_core/shared/development/image/server/linotp/provisioning/puppet/modules/common/manifests/init.pp",
+		"/Z/company_communication_core/shared/development/image/server/linotp/provisioning/puppet/modules/apt/manifests/init.pp",
+		"/Z/company_communication_core/shared/development/image/server/linotp/Dockerfile",
+		"/Z/company_communication_core/shared/development/image/server/linotp/provisioning/puppet/manifests/server_linotp.pp",
+		"/Z/company_communication_core/infrastructure/provisioning/windows/puppet/modules/active_directory/files/configure_active_directory.ps1",
+		"/Z/company_communication_core/application/server/api/controller/abstract_user.js",
+		"/Z/company_communication_core/application/server/api/controller/openldap_user.js",
+		"/Z/company_communication_core/application/server/api/oauth/index.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/controller/abstract_user.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/oauth/library/oauth.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/controller/user.js",
+		"/C/Daten/Arbeit/company_communication_core/application/client/bootstrap/view/page/login.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/service/change_user_password/controller/active_directory_user_password.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/service/change_user_password/controller/openldap_user_password.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/controller/active_directory_user.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/oauth/index.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/index.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/index.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/oauth/model/oauth/oauth.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/oauth/model/mongoose/token.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/service/index.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/oauth/error_handler.js",
+		"/C/Daten/Arbeit/company_communication_core/application/server/api/v1/agrostar_receipt_archive/library/users_sync.js",
+		"/C/Daten/Arbeit/company_communication_core/shared/development/image/base/debian/provisioning/shell/install_puppet.bash",
+		"/C/Daten/Arbeit/company_communication_core/shared/production/image/base/runtime/Dockerfile",
+		"/C/Daten/Arbeit/company_communication_core/shared/development/image/server/linotp/Dockerfile",
+		"/C/Daten/Arbeit/company_communication_core/shared/development/image/server/selenium/Dockerfile",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/provisioning/debian/shell/bootstrap.bash",
+		"/C/Daten/Arbeit/company_communication_core/shared/development/image/base/debian/Dockerfile",
+		"/C/Daten/Arbeit/company_communication_core/Vagrantfile",
+		"/C/Daten/Arbeit/company_communication_core/shared/development/image/base/debian/provisioning/puppet/tools/puppet_apply.bash",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/debian-10.1-amd64-virtualbox.box",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/http/preseed.cfg",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/scripts/cleanup.sh",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/scripts/minimize.sh",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/scripts/networking.sh",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/scripts/update.sh",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/scripts/vagrant.sh",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/scripts/virtualbox.sh",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/debian-10.1-amd64-virtualbox.json",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/README.md",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/boxes/debian-10.1-amd64/debian-10.1-amd64-virtualbox-sha256.checksum",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/provisioning/windows/shell/install_puppet.ps1",
+		"/C/Daten/Arbeit/company_communication_core/infrastructure/provisioning/windows/shell/install_puppet_modules.ps1",
+		"/C/Daten/Arbeit/company_communication_core/application/client/module/settings/view/page/security.js",
+		"/C/Daten/Arbeit/company_communication_core/application/client/common/component/material_design/ckeditor/plugin/file/file_upload_dialog/upload.js",
+		"/C/Daten/Arbeit/company_communication_core/application/common/.eslintrc.json",
+		"/C/Daten/Arbeit/company_communication_core/application/server/service/config.json",
+		"/C/Daten/Arbeit/company_communication_core/application/server/.eslintrc.json",
+		"/C/Daten/Arbeit/company_communication_core/shared/production/image/server/go_agent_production/provisioning/puppet/modules/supervisor/files/supervisord.conf",
+		"/C/Daten/Arbeit/company_communication_core/shared/production/image/server/go_agent_production/provisioning/puppet/modules/supervisor/manifests/init.pp",
+		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_agent_staging/provisioning/puppet/modules/supervisor/manifests/init.pp",
+		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_agent_staging/provisioning/puppet/modules/go_agent/manifests/init.pp",
+		"/C/Daten/Arbeit/company_communication_core/shared/production/image/server/go_agent_production/provisioning/puppet/modules/go_agent/manifests/init.pp",
+		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_agent_worker/provisioning/puppet/modules/go_agent/manifests/init.pp",
+		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_server/provisioning/puppet/modules/go_server/manifests/init.pp",
+		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_server/provisioning/puppet/modules/go_server/files/cruise-config.xml",
+		"/C/Temp/cfg.xml"
+	],
+	"find":
+	{
+		"height": 33.0
+	},
+	"find_in_files":
+	{
+		"height": 117.6,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 33.0
+	},
+	"input":
+	{
+		"height": 44.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "advent_of_code.sublime-project",
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Daten\\Arbeit\\hobby_vehicle_configurator\\hobby_vehicle_configurator.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 477.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
