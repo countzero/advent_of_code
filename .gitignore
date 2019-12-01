@@ -1,0 +1,31 @@
+#
+# .gitignore
+#
+
+# Ignore system files.
+*.swp
+.DS_Store
+
+# Ignore intellij idea directories and files
+.idea
+.venv
+
+# Ignore eclipse directories and files
+.externalToolBuilders/*
+.settings/*
+.project
+.buildpath
+
+# Ignore Sublime Text files.
+*.sublime-workspace
+
+# Ignore the '.vagrant' directory.
+.vagrant/*
+
+# Ignore temporary packer directories.
+infrastructure/boxes/*/output-virtualbox-iso
+infrastructure/boxes/*/packer_cache
+
+# Ignore the vagrant boxes and checksums.
+infrastructure/boxes/*/*.box
+infrastructure/boxes/*/*.checksum
