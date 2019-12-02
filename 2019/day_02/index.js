@@ -4,6 +4,24 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * Adds two values.
+ *
+ * @param {number} a The first value
+ * @param {number} b The second value
+ * @returns {number} The result.
+ */
+const add = (a, b) => a + b;
+
+/**
+ * Multiplies two values.
+ *
+ * @param {number} a The first value
+ * @param {number} b The second value
+ * @returns {number} The result.
+ */
+const multiply = (a, b) => a * b;
+
+/**
  * Reads an intcode program from a file into an array.
  *
  * @see https://adventofcode.com/2019/day/2
@@ -20,16 +38,29 @@ const readIntcodeProgram = (relativeFilePath = './input.txt', encoding = 'utf8')
 };
 
 /**
+ * Sets a program state by changing the input.
+ *
+ * @param {array} program An intcode program.
+ * @param {number} noun The input noun.
+ * @param {number} verb The input verb.
+ * @returns {array} The modified intcode program.
+ */
+const setProgramState = (program, noun, verb) => {
+
+    program[1] = noun;
+    program[2] = verb;
+
+    return program;
+};
+
+/**
  * Computes a given intcode program.
  *
  * @param {array} program A gravity assist program.
  * @param {string} encoding The input file encoding.
- * @returns {array} The gravity assist program.
+ * @returns {array} The computed gravity assist program.
  */
 const compute = (program, position = 0) => {
-
-    const add = (a, b) => a + b;
-    const multiply = (a, b) => a * b;
 
     const operationCode = program[position];
     const a = program[program[position + 1]];
@@ -56,25 +87,55 @@ const compute = (program, position = 0) => {
 }
 
 /**
- * Restores the 1202 program alarm state in a given intcode program.
+ * Reads the result of a computed intcode program.
  *
- * @param {array} program An intcode program.
- * @returns {array} The modified intcode program.
+ * @param {array} program A computed intcode program.
+ * @returns {number} The result of the program execution.
  */
-const restoreProgramAlarmState = program => {
+const readProgramResult = program => program[0];
 
-    program[1] = 12;
-    program[2] = 2;
+/**
+ * Finds the program input for a given output by brute force.
+ *
+ * @param {array} program A computed intcode program.
+ * @param {number} output The expected output.
+ * @returns {number} The noun multiplied by 100 plus the verb.
+ */
+const findInputByBruteForce = (program, output) => {
 
-    return program;
-};
+    const upperBoundary = 99;
+    let programResult;
 
+    for (let noun = 0; noun <= upperBoundary; noun++) {
+
+        for (let verb = 0; verb <= upperBoundary; verb++) {
+
+            programResult = readProgramResult(
+                compute(
+                    setProgramState(readIntcodeProgram(), noun, verb)
+                )
+            );
+
+            if (programResult === output) {
+
+                return add(multiply(100, noun), verb);
+            }
+        }
+    }
+
+    return 0;
+}
 
 console.log(
     'Solution for part one:',
-    compute(
-        restoreProgramAlarmState(
-            readIntcodeProgram()
+    readProgramResult(
+        compute(
+            setProgramState(readIntcodeProgram(), 12, 2)
         )
-    )[0]
+    )
+);
+
+console.log(
+    'Solution for part two:',
+    findInputByBruteForce(readIntcodeProgram(), 19690720)
 );
