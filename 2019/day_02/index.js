@@ -1,5 +1,7 @@
 'use strict';
 
+// Solutions for https://adventofcode.com/2019/day/2
+
 const fs = require('fs');
 const path = require('path');
 
@@ -23,8 +25,6 @@ const multiply = (a, b) => a * b;
 
 /**
  * Reads an intcode program from a file into an array.
- *
- * @see https://adventofcode.com/2019/day/2
  *
  * @param {string} relativeFilePath A file path relative to __dirname.
  * @param {string} encoding The input file encoding.

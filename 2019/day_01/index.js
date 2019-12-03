@@ -1,12 +1,12 @@
 'use strict';
 
+// Solutions for https://adventofcode.com/2019/day/1
+
 const fs = require('fs');
 const path = require('path');
 
 /**
- * Calculate the total fuel requirements for santa.
- *
- * @see https://adventofcode.com/2019/day/1
+ * Calculates the total fuel requirements for santa.
  *
  * @param {function} calculateFuel The fuel calculation algorithm.
  * @param {string} relativeFilePath A file path relative to __dirname.
@@ -26,7 +26,7 @@ const calculateTotalFuelRequirements = (calculateFuel, relativeFilePath = './inp
 };
 
 /**
- * Calculate the fuel requirements for a given mass.
+ * Calculates the fuel requirements for a given mass.
  *
  * @param {number} mass The module mass.
  * @returns {number} The fuel requirements for that mass.
@@ -34,7 +34,7 @@ const calculateTotalFuelRequirements = (calculateFuel, relativeFilePath = './inp
 const calculateFuelForMass = mass => Math.floor(mass / 3) - 2;
 
 /**
- * Calculate the fuel recursively.
+ * Calculates the fuel recursively.
  *
  * @param {number} mass A given mass.
  * @param {number} result The total fuel requirements.

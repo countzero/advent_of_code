@@ -1,12 +1,12 @@
 'use strict';
 
+// Solutions for https://adventofcode.com/2019/day/3
+
 const fs = require('fs');
 const path = require('path');
 
 /**
  * Reads the wire directions into an two dimensional array.
- *
- * @see https://adventofcode.com/2019/day/3
  *
  * @param {string} relativeFilePath A file path relative to __dirname.
  * @param {string} encoding The input file encoding.
@@ -71,7 +71,6 @@ const traceFromOrigin = wireDirections => {
                 }
                 break;
         }
-
     });
 
     return positionsRelativeToOrigin;
@@ -120,6 +119,58 @@ const calculateDistanceToNearestIntersection = intersections => {
     return distance;
 }
 
+/**
+ * Calculates the steps of a wire to a specific intersection.
+ *
+ * @param {Array<Array<number>>} intersections The intersections between two wires
+ * @param {Array<Array<number>>} positions The wire positions.
+ * @returns {number} The total wire steps to the specific intersection.
+ */
+const calculateStepsToIntersection = (intersection, positions) => {
+
+    let steps = 0;
+
+    positions.find((position, index) => {
+
+        if (position[0] === intersection[0] &&
+            position[1] === intersection[1]) {
+
+            steps = index;
+
+            return;
+        }
+    })
+
+    return steps;
+}
+
+/**
+ * Calculates the combined steps to the intersection with the shortest combined wire length.
+ *
+ * @param {Array<Array<number>>} intersections The intersections between two wires
+ * @param {Array<Array<number>>} positionsA The first wire positions.
+ * @param {Array<Array<number>>} positionsB The second wire positions.
+ * @returns {number} The combined steps to the intersection with the shortest combined wire length.
+ */
+const calculateStepsToIntersectionWithShortestCombinedWireLength = (intersections, positionsA, positionsB) => {
+
+    let combinedSteps = Number.MAX_VALUE;
+
+    intersections.forEach(intersection => {
+
+        const stepsToIntersection = calculateStepsToIntersection(intersection, positionsA) +
+                                    calculateStepsToIntersection(intersection, positionsB);
+
+        if (stepsToIntersection> 0 &&
+            stepsToIntersection < combinedSteps) {
+
+            combinedSteps = stepsToIntersection;
+        }
+    });
+
+    return combinedSteps;
+};
+
 console.log(
     'Solution for part one:',
     calculateDistanceToNearestIntersection(
@@ -127,5 +178,17 @@ console.log(
             traceFromOrigin(readWireDirections()[0]),
             traceFromOrigin(readWireDirections()[1])
         )
+    )
+);
+
+console.log(
+    'Solution for part two:',
+    calculateStepsToIntersectionWithShortestCombinedWireLength(
+        findIntersections(
+            traceFromOrigin(readWireDirections()[0]),
+            traceFromOrigin(readWireDirections()[1])
+        ),
+        traceFromOrigin(readWireDirections()[0]),
+        traceFromOrigin(readWireDirections()[1])
     )
 );
