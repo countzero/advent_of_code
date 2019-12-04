@@ -83,7 +83,30 @@ const filterValidationChecksByIds = (ids) => {
 
                 return true;
             }
-        }
+        },
+
+        {
+            id: 4,
+            description: 'Two adjacent numbers must be the same but not part of a larger group.',
+            check: password => {
+
+                const passwordAsText = password.toString();
+
+                let index = passwordAsText.length - 1;
+
+                while (index--) {
+
+                    if ((passwordAsText.charAt(index) === passwordAsText.charAt(index + 1)) &&
+                        (passwordAsText.charAt(index - 1) !== passwordAsText.charAt(index)) &&
+                        (passwordAsText.charAt(index + 2) !== passwordAsText.charAt(index + 1))) {
+
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        },
 
     ].filter(validationCheck => ids.includes(validationCheck.id));
 }
@@ -135,5 +158,8 @@ console.log(
 
 console.log(
     'Solution for part two:',
-    0
+    findValidSixDigitPasswordsByBruteForce(
+        readPasswordRange(),
+        filterValidationChecksByIds([1,3,4])
+    ).length
 );
