@@ -5,6 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 
+let passwordRange;
+
 /**
  * Reads the password range.
  *
@@ -14,32 +16,37 @@ const path = require('path');
  */
 const readPasswordRange = (relativeFilePath = './input.txt', encoding = 'utf8') => {
 
-    return fs.readFileSync(path.resolve(__dirname, relativeFilePath), encoding)
-           .split(/\n/)[0]
-           .split(/\-/);
+    if (passwordRange) {
+        return passwordRange;
+    }
+
+    return passwordRange = fs.readFileSync(path.resolve(__dirname, relativeFilePath), encoding)
+                          .split(/\n/)[0]
+                          .split(/\-/);
 };
 
 /**
- * Validates a six digit password against all validation rules.
+ * Filters validation checks by their ids.
  *
- * @param {integer} password A six digit password.
- * @param {Array} passwordRange The password range.
- * @returns {Boolean} The result of the validation.
+ * @param {Array} ids The ids of the requested validation checks.
+ * @returns {Array<object>} The filtered validation checks.
  */
-const passwordIsValid = (password, passwordRange) => {
+const filterValidationChecksByIds = (ids) => {
 
     return [
 
         {
+            id: 1,
             description: 'The password must be within the given range.',
             check: password => {
 
-                return (password >= passwordRange[0] &&
-                        password <= passwordRange[1]);
+                return (password >= readPasswordRange()[0] &&
+                        password <= readPasswordRange()[1]);
             }
         },
 
         {
+            id: 2,
             description: 'Two adjacent numbers must be the same.',
             check: password => {
 
@@ -59,6 +66,7 @@ const passwordIsValid = (password, passwordRange) => {
         },
 
         {
+            id: 3,
             description: 'Digits from left to right must not decrease.',
             check: password => {
 
@@ -75,18 +83,31 @@ const passwordIsValid = (password, passwordRange) => {
 
                 return true;
             }
-        },
+        }
 
-    ].every(validationRule => validationRule.check(password));
-};
+    ].filter(validationCheck => ids.includes(validationCheck.id));
+}
+
+/**
+ * Validates a six digit password against a given set of validation checks.
+ *
+ * @param {integer} password A six digit password.
+ * @param {Array<object>} validationChecks Validation checks.
+ * @returns {Boolean} The result of the validation.
+ */
+const passwordIsValid = (password, validationChecks) => {
+
+    return validationChecks.every(validationCheck => validationCheck.check(password));
+}
 
 /**
  * Finds valid six digit passwords by brute force.
  *
  * @param {Array} passwordRange The password range.
+ * @param {Array<object>} validationChecks Validation checks.
  * @returns {Array} All valid six digit passwords.
  */
-const findValidSixDigitPasswordsByBruteForce = passwordRange => {
+const findValidSixDigitPasswordsByBruteForce = (passwordRange, validationChecks) => {
 
     const validPasswords = [];
 
@@ -96,7 +117,7 @@ const findValidSixDigitPasswordsByBruteForce = passwordRange => {
 
         password++;
 
-        if (passwordIsValid(password, passwordRange)) {
+        if (passwordIsValid(password, validationChecks)) {
             validPasswords.push(password);
         }
     }
@@ -106,5 +127,13 @@ const findValidSixDigitPasswordsByBruteForce = passwordRange => {
 
 console.log(
     'Solution for part one:',
-    findValidSixDigitPasswordsByBruteForce(readPasswordRange()).length
+    findValidSixDigitPasswordsByBruteForce(
+        readPasswordRange(),
+        filterValidationChecksByIds([1,2,3])
+    ).length
+);
+
+console.log(
+    'Solution for part two:',
+    0
 );
