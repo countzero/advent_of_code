@@ -1,6 +1,6 @@
 'use strict';
 
-// Solutions for https://adventofcode.com/2019/day/5
+// Solutions for https://adventofcode.com/2019/day/6
 
 const fs = require('fs');
 const path = require('path');
@@ -67,10 +67,31 @@ const countAllOrbitingObjectsAroundCenterOfMass = (orbitRelationships, centerOfM
     return orbitCount;
 }
 
+// console.log(
+//     'Solution for part one:',
+//     countAllOrbitingObjectsAroundCenterOfMass(
+//         readUniversalOrbitMap(),
+//         'COM'
+//     ),
+// );
+
+const getOrbitTraceFor = (objectCode, orbitRelationships, centerOfMass) => {
+
+    return recursivelyTracePathToCenterOfMass(
+        orbitRelationships.find(relationship => relationship[1] === objectCode),
+        orbitRelationships,
+        centerOfMass
+    );
+}
+
+
 console.log(
-    'Solution for part one:',
-    countAllOrbitingObjectsAroundCenterOfMass(
-        readUniversalOrbitMap(),
-        'COM'
-    ),
+
+    getOrbitTraceFor('YOU', orbitRelationships, 'COM'),
+    getOrbitTraceFor('SAN', orbitRelationships, 'COM'),
+);
+
+console.log(
+    'Solution for part two:',
+    0,
 );
