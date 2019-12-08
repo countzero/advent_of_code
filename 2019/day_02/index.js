@@ -57,7 +57,7 @@ const setProgramState = (program, noun, verb) => {
  * Computes a given intcode program.
  *
  * @param {array} program A gravity assist program.
- * @param {string} encoding The input file encoding.
+ * @param {number} position The instruction pointer.
  * @returns {array} The computed gravity assist program.
  */
 const compute = (program, position = 0) => {

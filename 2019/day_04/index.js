@@ -31,7 +31,7 @@ const readPasswordRange = (relativeFilePath = './input.txt', encoding = 'utf8') 
  * @param {Array} ids The ids of the requested validation checks.
  * @returns {Array<object>} The filtered validation checks.
  */
-const filterValidationChecksByIds = (ids) => {
+const filterValidationChecksByIds = ids => {
 
     return [
 

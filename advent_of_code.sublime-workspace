@@ -48,52 +48,19 @@
 	"buffers":
 	[
 		{
-			"file": "2019/day_02/input.txt",
+			"file": "2019/day_05/index.js",
 			"settings":
 			{
-				"buffer_size": 377,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "2019/day_02/index.js",
-			"settings":
-			{
-				"buffer_size": 3386,
+				"buffer_size": 3889,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/R/Daten/Privat/Projekte/awesome-advent-of-code/2018.md",
+			"file": "2019/day_05/input.txt",
 			"settings":
 			{
-				"buffer_size": 43360,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/R/Daten/Privat/Projekte/awesome-advent-of-code/scripts/add-badges.py",
-			"settings":
-			{
-				"buffer_size": 950,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/R/Daten/Privat/Projekte/awesome-advent-of-code/README.md",
-			"settings":
-			{
-				"buffer_size": 20118,
-				"encoding": "UTF-8",
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "2019/day_01/index.js",
-			"settings":
-			{
-				"buffer_size": 1765,
+				"buffer_size": 2537,
 				"line_ending": "Unix"
 			}
 		}
@@ -133,14 +100,21 @@
 	[
 		"/R/Daten/Privat/Projekte/advent_of_code",
 		"/R/Daten/Privat/Projekte/advent_of_code/2019",
-		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_01",
-		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_02"
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_05"
 	],
 	"file_history":
 	[
-		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_01/input.txt",
-		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_01/index.js",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_05/input.txt",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_04/index.js",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_04/input.txt",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_03/input.txt",
 		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_02/index.js",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_02/input.txt",
+		"/R/Daten/Privat/Projekte/awesome-advent-of-code/2018.md",
+		"/R/Daten/Privat/Projekte/awesome-advent-of-code/scripts/add-badges.py",
+		"/R/Daten/Privat/Projekte/awesome-advent-of-code/README.md",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_01/index.js",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_01/input.txt",
 		"/R/Daten/Privat/Projekte/advent_of_code/README.md",
 		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/controller/benchmark/sql/update_one_company.sql",
 		"/R/Daten/Arbeit/learning_postgresql/shared/application/server/database/postgresql/schema/0009.sql",
@@ -257,15 +231,7 @@
 		"/C/Daten/Arbeit/company_communication_core/infrastructure/provisioning/windows/shell/install_puppet.ps1",
 		"/C/Daten/Arbeit/company_communication_core/infrastructure/provisioning/windows/shell/install_puppet_modules.ps1",
 		"/C/Daten/Arbeit/company_communication_core/application/client/module/settings/view/page/security.js",
-		"/C/Daten/Arbeit/company_communication_core/application/client/common/component/material_design/ckeditor/plugin/file/file_upload_dialog/upload.js",
-		"/C/Daten/Arbeit/company_communication_core/application/common/.eslintrc.json",
-		"/C/Daten/Arbeit/company_communication_core/application/server/service/config.json",
-		"/C/Daten/Arbeit/company_communication_core/application/server/.eslintrc.json",
-		"/C/Daten/Arbeit/company_communication_core/shared/production/image/server/go_agent_production/provisioning/puppet/modules/supervisor/files/supervisord.conf",
-		"/C/Daten/Arbeit/company_communication_core/shared/production/image/server/go_agent_production/provisioning/puppet/modules/supervisor/manifests/init.pp",
-		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_agent_staging/provisioning/puppet/modules/supervisor/manifests/init.pp",
-		"/C/Daten/Arbeit/company_communication_core/shared/staging/image/server/go_agent_staging/provisioning/puppet/modules/go_agent/manifests/init.pp",
-		"/C/Daten/Arbeit/company_communication_core/shared/production/image/server/go_agent_production/provisioning/puppet/modules/go_agent/manifests/init.pp"
+		"/C/Daten/Arbeit/company_communication_core/application/client/common/component/material_design/ckeditor/plugin/file/file_upload_dialog/upload.js"
 	],
 	"find":
 	{
@@ -303,16 +269,56 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "2019/day_02/input.txt",
+					"file": "2019/day_05/index.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 377,
+						"buffer_size": 3889,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1673,
+								1646
+							]
+						],
+						"settings":
+						{
+							"SL.13.region_keys":
+							[
+							],
+							"SL.25.region_keys":
+							[
+							],
+							"auto_complete": false,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 228.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "2019/day_05/input.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2537,
 						"regions":
 						{
 						},
@@ -334,187 +340,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "2019/day_02/index.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3386,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3321,
-								3321
-							]
-						],
-						"settings":
-						{
-							"SL.20.region_keys":
-							[
-							],
-							"auto_complete": false,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2232.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/R/Daten/Privat/Projekte/awesome-advent-of-code/2018.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 43360,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"SL.22.region_keys":
-							[
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 16083.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/R/Daten/Privat/Projekte/awesome-advent-of-code/scripts/add-badges.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 950,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/R/Daten/Privat/Projekte/awesome-advent-of-code/README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 20118,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"SL.17.region_keys":
-							[
-							],
-							"SL.24.region_keys":
-							[
-							],
-							"auto_complete": false,
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 6040.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "2019/day_01/index.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1765,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"SL.21.region_keys":
-							[
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
 					"type": "text"
 				}
 			]
