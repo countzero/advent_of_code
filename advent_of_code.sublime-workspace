@@ -51,7 +51,16 @@
 			"file": "2019/day_05/index.js",
 			"settings":
 			{
-				"buffer_size": 3889,
+				"buffer_size": 5970,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "2019/day_04/index.js",
+			"settings":
+			{
+				"buffer_size": 4387,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -100,6 +109,7 @@
 	[
 		"/R/Daten/Privat/Projekte/advent_of_code",
 		"/R/Daten/Privat/Projekte/advent_of_code/2019",
+		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_04",
 		"/R/Daten/Privat/Projekte/advent_of_code/2019/day_05"
 	],
 	"file_history":
@@ -249,6 +259,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"getParameterPosition",
 			"JavaSc",
 			"#javascript",
 			"javascript"
@@ -259,6 +270,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"getParameterValuePosition"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -278,15 +290,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3889,
+						"buffer_size": 5970,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1673,
-								1646
+								4375,
+								4375
 							]
 						],
 						"settings":
@@ -306,7 +318,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 228.0,
+						"translation.y": 3720.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -314,6 +326,43 @@
 				},
 				{
 					"buffer": 1,
+					"file": "2019/day_04/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4387,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2353,
+								2268
+							]
+						],
+						"settings":
+						{
+							"SL.17.region_keys":
+							[
+							],
+							"auto_complete": false,
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1872.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
 					"file": "2019/day_05/input.txt",
 					"semi_transient": false,
 					"settings":
@@ -340,7 +389,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -393,7 +442,7 @@
 	"project": "advent_of_code.sublime-project",
 	"replace":
 	{
-		"height": 62.0
+		"height": 78.0
 	},
 	"save_all_on_build": true,
 	"select_file":

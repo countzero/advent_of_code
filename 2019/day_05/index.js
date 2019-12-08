@@ -105,60 +105,91 @@ const getParameterValuePosition = (program, position, parameterPositionOffset) =
     throw new Error('Unknown parameter position mode.');
 }
 
-const addOperation = {
+/**
+ * Gets the operation handler by its operation code.
+ *
+ * @param {number} operationCode The operation code.
+ * @returns {object} The operation handler.
+ */
+const getOperationHandler = operationCode => {
 
-    execute: (program, position) => {
+    const operation = [
+        {
+            code: 1,
+            name: 'add',
+            getModifiedProgram: (input, program, position, output) => {
 
-        program[getParameterValuePosition(program, position, 3)] = add(
-            program[getParameterValuePosition(program, position, 1)],
-            program[getParameterValuePosition(program, position, 2)]
-        );
+                program[getParameterValuePosition(program, position, 3)] = add(
+                    program[getParameterValuePosition(program, position, 1)],
+                    program[getParameterValuePosition(program, position, 2)]
+                );
 
-        return program;
-    },
+                return program;
+            },
+            getNextPosition: position => position + 4,
+            getExtendedOutput: (input, program, position, output) => output,
+        },
 
-    getNextPosition: position => position + 4,
-}
+        {
+            code: 2,
+            name: 'multiply',
+            getModifiedProgram: (input, program, position, output) => {
 
-const multiplyOperation = {
+                program[getParameterValuePosition(program, position, 3)] = multiply(
+                    program[getParameterValuePosition(program, position, 1)],
+                    program[getParameterValuePosition(program, position, 2)]
+                );
 
-    execute: (program, position) => {
+                return program;
+            },
+            getNextPosition: position => position + 4,
+            getExtendedOutput: (input, program, position, output) => output,
+        },
 
-        program[getParameterValuePosition(program, position, 3)] = multiply(
-            program[getParameterValuePosition(program, position, 1)],
-            program[getParameterValuePosition(program, position, 2)]
-        );
+        {
+            code: 3,
+            name: 'input',
+            getModifiedProgram: (input, program, position, output) => {
 
-        return program;
-    },
+                program[getParameterValuePosition(program, position, 1)] = input;
 
-    getNextPosition: position => position + 4,
-}
+                return program;
+            },
+            getNextPosition: position => position + 2,
+            getExtendedOutput: (input, program, position, output) => output,
+        },
 
-const inputOperation = {
+        {
+            code: 4,
+            name: 'output',
+            getModifiedProgram: (input, program, position, output) => program,
+            getNextPosition: position => position + 2,
+            getExtendedOutput: (input, program, position, output) => {
 
-    execute: (input, program, position) => {
+                output.push(
+                    program[getParameterValuePosition(program, position, 1)]
+                );
 
-        program[getParameterValuePosition(program, position, 1)] = input;
+                return output;
+            },
+        },
 
-        return program;
-    },
+        {
+            code: 99,
+            name: 'halt',
+            getModifiedProgram: (input, program, position, output) => program,
+            getNextPosition: position => position,
+            getExtendedOutput: (input, program, position, output) => output,
+        },
 
-    getNextPosition: position => position + 2,
-}
+    ].find(operation => operation.code === operationCode)
 
-const outputOperation = {
+    if (typeof operation == 'undefined') {
 
-    execute: program => program,
-    getOutput: (program, position, output) => {
+        throw new Error(`Unknown operation code '${operationCode}': The operation is not implemented.`)
+    }
 
-        output.push(
-            program[getParameterValuePosition(program, position, 1)]
-        );
-
-        return output;
-    },
-    getNextPosition: position => position + 2,
+    return operation;
 }
 
 /**
@@ -172,51 +203,23 @@ const outputOperation = {
  */
 const compute = (input, program, position = 0, output = []) => {
 
-    switch (getOperationCode(program[position])) {
+    const operationCode = getOperationCode(program[position]);
+    const operation = getOperationHandler(operationCode);
 
-        case 1:
+    if (operation.name === 'halt') {
 
-            return compute(
-                input,
-                addOperation.execute(program, position),
-                addOperation.getNextPosition(position),
-                output
-            )
-
-        case 2:
-
-            return compute(
-                input,
-                multiplyOperation.execute(program, position),
-                multiplyOperation.getNextPosition(position),
-                output
-            )
-
-        case 3:
-
-            return compute(
-                input,
-                inputOperation.execute(input, program, position),
-                inputOperation.getNextPosition(position),
-                output
-            )
-
-        case 4:
-
-            return compute(
-                input,
-                outputOperation.execute(program),
-                outputOperation.getNextPosition(position),
-                outputOperation.getOutput(program, position, output)
-            )
-
-        case 99:
-
-            return {
-                program,
-                output
-            };
+        return {
+            program: operation.getModifiedProgram(input, program, position, output),
+            output: operation.getExtendedOutput(input, program, position, output),
+        };
     }
+
+    return compute(
+        input,
+        operation.getModifiedProgram(input, program, position, output),
+        operation.getNextPosition(position),
+        operation.getExtendedOutput(input, program, position, output)
+    )
 }
 
 /**
@@ -232,6 +235,16 @@ console.log(
     readDiagnosticCode(
         compute(
             1,
+            readIntcodeProgram()
+        )
+    )
+);
+
+console.log(
+    'Solution for part two:',
+    readDiagnosticCode(
+        compute(
+            5,
             readIntcodeProgram()
         )
     )
