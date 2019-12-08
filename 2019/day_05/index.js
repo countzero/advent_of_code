@@ -24,6 +24,15 @@ const add = (a, b) => a + b;
 const multiply = (a, b) => a * b;
 
 /**
+ * Checks if the first value is less than the second value.
+ *
+ * @param {number} a The first value
+ * @param {number} b The second value
+ * @returns {number} The result.
+ */
+const isLess = (a, b) => a < b;
+
+/**
  * Reads an intcode program from a file into an array.
  *
  * @param {string} relativeFilePath A file path relative to __dirname.
@@ -194,6 +203,90 @@ const getOperationHandler = operationCode => {
                 return output;
             },
             getNextPosition: context => context.position + 2,
+        },
+
+        {
+            code: 5,
+            name: 'jumpIfTrue',
+            getModifiedProgram: context => context.program,
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => {
+
+                const {
+                    program,
+                    position,
+                } = context;
+
+                if (program[getParameterValuePosition(program, position, 1)] !== 0) {
+
+                    return program[getParameterValuePosition(program, position, 2)];
+                }
+
+                return position + 3;
+            },
+        },
+
+        {
+            code: 6,
+            name: 'jumpIfFalse',
+            getModifiedProgram: context => context.program,
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => {
+
+                const {
+                    program,
+                    position,
+                } = context;
+
+                if (program[getParameterValuePosition(program, position, 1)] === 0) {
+
+                    return program[getParameterValuePosition(program, position, 2)];
+                }
+
+                return position + 3;
+            },
+        },
+
+        {
+            code: 7,
+            name: 'lessThan',
+            getModifiedProgram: context => {
+
+                const {
+                    program,
+                    position,
+                } = context;
+
+                program[getParameterValuePosition(program, position, 3)] = isLess(
+                    program[getParameterValuePosition(program, position, 1)],
+                    program[getParameterValuePosition(program, position, 2)]
+                ) ? 1 : 0;
+
+                return program;
+            },
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => context.position + 4,
+        },
+
+        {
+            code: 8,
+            name: 'equals',
+            getModifiedProgram: context => {
+
+                const {
+                    program,
+                    position,
+                } = context;
+
+                const firstValueEqualsSecondValue = program[getParameterValuePosition(program, position, 1)] ===
+                                                    program[getParameterValuePosition(program, position, 2)];
+
+                program[getParameterValuePosition(program, position, 3)] = firstValueEqualsSecondValue ? 1 : 0;
+
+                return program;
+            },
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => context.position + 4,
         },
 
         {
