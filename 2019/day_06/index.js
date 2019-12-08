@@ -16,12 +16,61 @@ const readUniversalOrbitMap = (relativeFilePath = './input.txt', encoding = 'utf
 
     return fs.readFileSync(path.resolve(__dirname, relativeFilePath), encoding)
            .split(/\n/)
+           .filter(relationship => relationship !== '')
            .map(relationship => relationship.split(/\)/));
 };
 
-console.log(readUniversalOrbitMap);
+/**
+ * Recursively traces an orbit relationship back to the center of mass (COM) object.
+ *
+ * @param {array} relationship A orbit relationship.
+ * @param {array<array<string>>} The universal orbit map.
+ * @param {string} centerOfMass The object code for the center of mass.
+ * @param {array} result All objects the initial object orbits around.
+ * @returns {array} All objects the initial object orbits around.
+ */
+const recursivelyTracePathToCenterOfMass = (relationship, orbitRelationships, centerOfMass, result = []) => {
+
+    const source = relationship[0];
+
+    result.push(source);
+
+    if (source === centerOfMass) {
+        return result;
+    }
+
+    const nextOrbitRelationship = orbitRelationships.find(nextRelationship => nextRelationship[1] === source);
+
+    return recursivelyTracePathToCenterOfMass(nextOrbitRelationship, orbitRelationships, centerOfMass, result);
+}
+
+/**
+ * Counts all orbiting objects around the center of mass (COM) object.
+ *
+ * @param {array<array<string>>} The universal orbit map.
+ * @param {string} centerOfMass The object code for the center of mass.
+ * @returns {number} The total number of orbiting objects around the center of mass.
+ */
+const countAllOrbitingObjectsAroundCenterOfMass = (orbitRelationships, centerOfMass) => {
+
+    let orbitCount = 0;
+
+    orbitRelationships.forEach(relationship => {
+
+        orbitCount += recursivelyTracePathToCenterOfMass(
+            relationship,
+            orbitRelationships,
+            centerOfMass
+        ).length;
+    });
+
+    return orbitCount;
+}
 
 console.log(
     'Solution for part one:',
-    0
+    countAllOrbitingObjectsAroundCenterOfMass(
+        readUniversalOrbitMap(),
+        'COM'
+    ),
 );
