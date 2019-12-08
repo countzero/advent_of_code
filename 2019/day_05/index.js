@@ -4,7 +4,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const util = require('util');
 
 /**
  * Adds two values.
@@ -165,10 +164,11 @@ const outputOperation = {
 /**
  * Computes a given intcode program.
  *
- * @param {array} program An intcode program.
  * @param {number} input The program input.
- * @param {number} position  The input file encoding.
- * @returns {array} The computed gravity assist program.
+ * @param {array} program An intcode program.
+ * @param {number} position The program pointer position.
+ * @param {array} output The program output log.
+ * @returns {object} The compute result.
  */
 const compute = (input, program, position = 0, output = []) => {
 
@@ -219,10 +219,20 @@ const compute = (input, program, position = 0, output = []) => {
     }
 }
 
+/**
+ * Read the diagnostic code from the output log.
+ *
+ * @param {object} computeResult The compute result.
+ * @returns {number} The diagnostic result.
+ */
+const readDiagnosticCode = computeResult => computeResult.output.pop();
+
 console.log(
     'Solution for part one:',
-    compute(
-        1,
-        readIntcodeProgram()
-    ).output.pop()
+    readDiagnosticCode(
+        compute(
+            1,
+            readIntcodeProgram()
+        )
+    )
 );
