@@ -33,6 +33,15 @@ const multiply = (a, b) => a * b;
 const isLess = (a, b) => a < b;
 
 /**
+ * Checks if the first value equals the second value.
+ *
+ * @param {number} a The first value
+ * @param {number} b The second value
+ * @returns {number} The result.
+ */
+const equals = (a, b) => a === b;
+
+/**
  * Reads an intcode program from a file into an array.
  *
  * @param {string} relativeFilePath A file path relative to __dirname.
@@ -278,10 +287,10 @@ const getOperationHandler = operationCode => {
                     position,
                 } = context;
 
-                const firstValueEqualsSecondValue = program[getParameterValuePosition(program, position, 1)] ===
-                                                    program[getParameterValuePosition(program, position, 2)];
-
-                program[getParameterValuePosition(program, position, 3)] = firstValueEqualsSecondValue ? 1 : 0;
+                program[getParameterValuePosition(program, position, 3)] = equals(
+                    program[getParameterValuePosition(program, position, 1)],
+                    program[getParameterValuePosition(program, position, 2)]
+                ) ? 1 : 0;
 
                 return program;
             },
