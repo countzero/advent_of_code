@@ -117,7 +117,12 @@ const getOperationHandler = operationCode => {
         {
             code: 1,
             name: 'add',
-            getModifiedProgram: (input, program, position, output) => {
+            getModifiedProgram: context => {
+
+                const {
+                    program,
+                    position,
+                } = context;
 
                 program[getParameterValuePosition(program, position, 3)] = add(
                     program[getParameterValuePosition(program, position, 1)],
@@ -126,14 +131,19 @@ const getOperationHandler = operationCode => {
 
                 return program;
             },
-            getNextPosition: position => position + 4,
-            getExtendedOutput: (input, program, position, output) => output,
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => context.position + 4,
         },
 
         {
             code: 2,
             name: 'multiply',
-            getModifiedProgram: (input, program, position, output) => {
+            getModifiedProgram: context => {
+
+                const {
+                    program,
+                    position,
+                } = context;
 
                 program[getParameterValuePosition(program, position, 3)] = multiply(
                     program[getParameterValuePosition(program, position, 1)],
@@ -142,29 +152,40 @@ const getOperationHandler = operationCode => {
 
                 return program;
             },
-            getNextPosition: position => position + 4,
-            getExtendedOutput: (input, program, position, output) => output,
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => context.position + 4,
         },
 
         {
             code: 3,
             name: 'input',
-            getModifiedProgram: (input, program, position, output) => {
+            getModifiedProgram: context => {
+
+                const {
+                    input,
+                    program,
+                    position,
+                } = context;
 
                 program[getParameterValuePosition(program, position, 1)] = input;
 
                 return program;
             },
-            getNextPosition: position => position + 2,
-            getExtendedOutput: (input, program, position, output) => output,
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => context.position + 2,
         },
 
         {
             code: 4,
             name: 'output',
-            getModifiedProgram: (input, program, position, output) => program,
-            getNextPosition: position => position + 2,
-            getExtendedOutput: (input, program, position, output) => {
+            getModifiedProgram: context => context.program,
+            getExtendedOutput: context => {
+
+                const {
+                    program,
+                    position,
+                    output,
+                } = context;
 
                 output.push(
                     program[getParameterValuePosition(program, position, 1)]
@@ -172,14 +193,15 @@ const getOperationHandler = operationCode => {
 
                 return output;
             },
+            getNextPosition: context => context.position + 2,
         },
 
         {
             code: 99,
             name: 'halt',
-            getModifiedProgram: (input, program, position, output) => program,
-            getNextPosition: position => position,
-            getExtendedOutput: (input, program, position, output) => output,
+            getModifiedProgram: context => context.program,
+            getExtendedOutput: context => context.output,
+            getNextPosition: context => context.position,
         },
 
     ].find(operation => operation.code === operationCode)
@@ -203,22 +225,30 @@ const getOperationHandler = operationCode => {
  */
 const compute = (input, program, position = 0, output = []) => {
 
-    const operationCode = getOperationCode(program[position]);
-    const operation = getOperationHandler(operationCode);
+    const operation = getOperationHandler(
+        getOperationCode(program[position])
+    );
+
+    const context = {
+        input,
+        program,
+        position,
+        output
+    };
 
     if (operation.name === 'halt') {
 
         return {
-            program: operation.getModifiedProgram(input, program, position, output),
-            output: operation.getExtendedOutput(input, program, position, output),
+            program: operation.getModifiedProgram(context),
+            output: operation.getExtendedOutput(context),
         };
     }
 
     return compute(
         input,
-        operation.getModifiedProgram(input, program, position, output),
-        operation.getNextPosition(position),
-        operation.getExtendedOutput(input, program, position, output)
+        operation.getModifiedProgram(context),
+        operation.getNextPosition(context),
+        operation.getExtendedOutput(context)
     )
 }
 
