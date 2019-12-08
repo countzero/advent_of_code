@@ -18,7 +18,7 @@ const readUniversalOrbitMap = (relativeFilePath = './input.txt', encoding = 'utf
            .split(/\n/)
            .filter(relationship => relationship !== '')
            .map(relationship => relationship.split(/\)/));
-};
+}
 
 /**
  * Recursively traces an orbit relationship back to the center of mass (COM) object.
@@ -67,14 +67,14 @@ const countAllOrbitingObjectsAroundCenterOfMass = (orbitRelationships, centerOfM
     return orbitCount;
 }
 
-// console.log(
-//     'Solution for part one:',
-//     countAllOrbitingObjectsAroundCenterOfMass(
-//         readUniversalOrbitMap(),
-//         'COM'
-//     ),
-// );
-
+/**
+ * Get all orbiting objects between a specific object and the center of mass (COM) object.
+ *
+ * @param {string} objectCode The starting point.
+ * @param {array<array<string>>} The universal orbit map.
+ * @param {string} centerOfMass The object code for the center of mass.
+ * @returns {array<string>} All orbiting objects between a specific object and the center of mass.
+ */
 const getOrbitTraceFor = (objectCode, orbitRelationships, centerOfMass) => {
 
     return recursivelyTracePathToCenterOfMass(
@@ -84,14 +84,33 @@ const getOrbitTraceFor = (objectCode, orbitRelationships, centerOfMass) => {
     );
 }
 
+/**
+ * Find the minimal number of orbit transfers required to get from A to B.
+ *
+ * @param {string} objectsA The orbit trace from object A.
+ * @param {string} objectsB The orbit trace from object B.
+ * @returns {number} The total number of required orbit transfers.
+ */
+const findMinimalOrbitTransferCount = (objectsA, objectsB) => {
+
+    const commonOrbits = objectsA.filter(objectA => objectsB.includes(objectA));
+    const nearestIntersection = commonOrbits[0];
+
+    return objectsA.indexOf(nearestIntersection) + objectsB.indexOf(nearestIntersection);
+}
 
 console.log(
-
-    getOrbitTraceFor('YOU', orbitRelationships, 'COM'),
-    getOrbitTraceFor('SAN', orbitRelationships, 'COM'),
+    'Solution for part one:',
+    countAllOrbitingObjectsAroundCenterOfMass(
+        readUniversalOrbitMap(),
+        'COM'
+    ),
 );
 
 console.log(
     'Solution for part two:',
-    0,
+    findMinimalOrbitTransferCount(
+        getOrbitTraceFor('YOU', readUniversalOrbitMap(), 'COM'),
+        getOrbitTraceFor('SAN', readUniversalOrbitMap(), 'COM'),
+    )
 );
