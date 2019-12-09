@@ -1,6 +1,6 @@
 'use strict';
 
-// Solutions for https://adventofcode.com/2019/day/5
+// Solutions for https://adventofcode.com/2019/day/7
 
 const fs = require('fs');
 const path = require('path');
@@ -441,14 +441,9 @@ const findLargestOutputSignal = phaseSettingSequences => {
     return largestOutputSignal;
 };
 
-// console.log(
-//     'Solution for part one:',
-//     findLargestOutputSignal(
-//         findAllPermutations([0, 1, 2, 3, 4])
-//     )
-// );
-
-
 console.log(
-    runAmplifierSeries([5, 6, 7, 8, 9])
+    'Solution for part one:',
+    findLargestOutputSignal(
+        findAllPermutations([0, 1, 2, 3, 4])
+    )
 );
