@@ -441,9 +441,14 @@ const findLargestOutputSignal = phaseSettingSequences => {
     return largestOutputSignal;
 };
 
+// console.log(
+//     'Solution for part one:',
+//     findLargestOutputSignal(
+//         findAllPermutations([0, 1, 2, 3, 4])
+//     )
+// );
+
+
 console.log(
-    'Solution for part one:',
-    findLargestOutputSignal(
-        findAllPermutations([0, 1, 2, 3, 4])
-    )
+    runAmplifierSeries([5, 6, 7, 8, 9])
 );
