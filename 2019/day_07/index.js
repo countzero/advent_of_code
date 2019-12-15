@@ -326,7 +326,7 @@ const getOperationHandler = operationCode => {
  * @param {array} output The program output log.
  * @returns {object} The compute result.
  */
-const compute = (inputValues, program, position = 0, inputPosition = 0, output = []) => {
+const compute = (inputValues, program, signalsCallback, position = 0, inputPosition = 0, output = []) => {
 
     const operation = getOperationHandler(
         getOperationCode(program[position])
@@ -339,12 +339,35 @@ const compute = (inputValues, program, position = 0, inputPosition = 0, output =
         output
     };
 
+    if (operation.name === 'output') {
+
+        // If there is a signal handler pause the computation
+        // at every output instruction and delegate the further
+        // processing by passing the current program state.
+        if (signalsCallback) {
+
+            const currentState = {
+                inputValues,
+                program: operation.getModifiedProgram(context),
+                position: operation.getNextPosition(context),
+                inputPosition,
+                output: operation.getExtendedOutput(context),
+            };
+
+            signalsCallback('pause', currentState);
+
+            return;
+        }
+    }
+
     if (operation.name === 'input') {
 
         inputPosition++;
     }
 
     if (operation.name === 'halt') {
+
+        signalsCallback(operation.name, context);
 
         return {
             program: operation.getModifiedProgram(context),
@@ -355,6 +378,7 @@ const compute = (inputValues, program, position = 0, inputPosition = 0, output =
     return compute(
         inputValues,
         operation.getModifiedProgram(context),
+        signalsCallback,
         operation.getNextPosition(context),
         inputPosition,
         operation.getExtendedOutput(context)
@@ -397,12 +421,37 @@ const findAllPermutations = (values = [0, 1, 2]) => {
 };
 
 /**
+ * Finds the largest output signal of the amplifier
+ * series for a given set of phase setting sequences.
+ *
+ * @param {array<array<number>>} phaseSettingSequences The phase setting sequence for the run.
+ * @param {function} runAmplifierConfiguration The execution function of a specific amplifier configuration.
+ * @returns {number} The largest output of the amplifier series.
+ */
+const findLargestOutputSignal = (phaseSettingSequences, runAmplifierConfiguration) => {
+
+    let largestOutputSignal = 0;
+
+    phaseSettingSequences.forEach(phaseSettingSequence => {
+
+        const amplifierOutput = runAmplifierConfiguration(phaseSettingSequence);
+
+        if (amplifierOutput > largestOutputSignal) {
+
+            largestOutputSignal = amplifierOutput;
+        }
+    });
+
+    return largestOutputSignal;
+};
+
+/**
  * Runs all amplifiers in series with a given phase setting sequence.
  *
  * @param {array<number>} phaseSettingSequence The phase setting sequence for the run.
  * @returns {number} The last amplifiers output value.
  */
-const runAmplifierSeries = phaseSettingSequence => {
+const runAmplifiersInSeries = phaseSettingSequence => {
 
     let amplifierOutput = 0;
 
@@ -417,33 +466,125 @@ const runAmplifierSeries = phaseSettingSequence => {
     return amplifierOutput;
 }
 
-/**
- * Finds the largest output signal of the amplifier
- * series for a given set of phase setting sequences.
- *
- * @param {array<array<number>>} phaseSettingSequences The phase setting sequence for the run.
- * @returns {number} The largest output of the amplifier series.
- */
-const findLargestOutputSignal = phaseSettingSequences => {
 
-    let largestOutputSignal = 0;
+// console.log(
+//     'Solution for part one:',
+//     findLargestOutputSignal(
+//         findAllPermutations([0, 1, 2, 3, 4]),
+//         runAmplifiersInSeries
+//     )
+// );
 
-    phaseSettingSequences.forEach(phaseSettingSequence => {
 
-        const amplifierOutput = runAmplifierSeries(phaseSettingSequence);
+class Computer {
 
-        if (amplifierOutput > largestOutputSignal) {
+    constructor (name, inputValues, program) {
 
-            largestOutputSignal = amplifierOutput;
+        this.name = name;
+
+        this.state = {
+            inputValues,
+            program,
+            position: 0,
+            inputPosition: 0,
+            output: [],
+        };
+    }
+
+    setState (state) {
+
+        this.state = state;
+    }
+
+    setOutputSignalHandler (outputSignalHandler) {
+
+        this.outputSignalHandler = outputSignalHandler;
+    }
+
+    addInputSignal (input) {
+
+        this.state.inputValues.push(input);
+
+        this.start();
+    }
+
+    handleSignals (signal, state) {
+
+        if (signal === 'pause') {
+
+            this.setState(state);
+
+            console.log(this.name, 'pause - output', state.output.slice(-1)[0]);
+
+            this.outputSignalHandler.addInputSignal(
+                state.output.slice(-1)[0]
+            );
         }
-    });
 
-    return largestOutputSignal;
-};
+        if (signal === 'halt') {
+
+            console.log(this.name, signal, state);
+        }
+    }
+
+    start () {
+
+        console.log(this.name, 'start - input', this.state.inputValues[this.state.inputPosition]);
+
+        compute(
+            this.state.inputValues,
+            this.state.program,
+            this.handleSignals.bind(this),
+            this.state.position,
+            this.state.inputPosition,
+            this.state.output
+        );
+    }
+}
+
+
+/**
+ * Runs all amplifiers in a feedback loop with a given phase setting sequence.
+ *
+ * @param {array<number>} phaseSettingSequence The phase setting sequence for the run.
+ * @returns {number} The last amplifiers output value.
+ */
+const runAmplifierFeedbackLoop = phaseSettingSequence => {
+
+    let amplifierOutput = 0;
+
+    const amplifierA = new Computer('Amplifier A', [phaseSettingSequence[0], 0], readIntcodeProgram());
+    const amplifierB = new Computer('Amplifier B', [phaseSettingSequence[1]], readIntcodeProgram());
+    const amplifierC = new Computer('Amplifier C', [phaseSettingSequence[2]], readIntcodeProgram());
+    const amplifierD = new Computer('Amplifier D', [phaseSettingSequence[3]], readIntcodeProgram());
+    const amplifierE = new Computer('Amplifier E', [phaseSettingSequence[4]], readIntcodeProgram());
+
+    amplifierA.setOutputSignalHandler(amplifierB);
+    amplifierB.setOutputSignalHandler(amplifierC);
+    amplifierC.setOutputSignalHandler(amplifierD);
+    amplifierD.setOutputSignalHandler(amplifierE);
+    amplifierE.setOutputSignalHandler(amplifierA);
+
+    amplifierA.start();
+
+    return amplifierOutput;
+}
+
+
+// console.log(
+//     findLargestOutputSignal(
+//         findAllPermutations([5, 6, 7, 8, 9]),
+//         runAmplifierFeedbackLoop
+//     )
+// )
+
 
 console.log(
-    'Solution for part one:',
-    findLargestOutputSignal(
-        findAllPermutations([0, 1, 2, 3, 4])
-    )
+
+    runAmplifierFeedbackLoop([5, 6, 7, 8, 9])
+)
+
+console.log(
+    'Solution for part two:',
+    0
 );
