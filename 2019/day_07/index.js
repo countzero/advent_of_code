@@ -367,7 +367,11 @@ const compute = (inputValues, program, signalsCallback, position = 0, inputPosit
 
     if (operation.name === 'halt') {
 
-        signalsCallback(operation.name, context);
+        // If there is a signal handler inform it, that the
+        // computer has reached the end of its program.
+        if (signalsCallback) {
+            signalsCallback(operation.name);
+        }
 
         return {
             program: operation.getModifiedProgram(context),
@@ -428,19 +432,19 @@ const findAllPermutations = (values = [0, 1, 2]) => {
  * @param {function} runAmplifierConfiguration The execution function of a specific amplifier configuration.
  * @returns {number} The largest output of the amplifier series.
  */
-const findLargestOutputSignal = (phaseSettingSequences, runAmplifierConfiguration) => {
+const findLargestOutputSignal = async (phaseSettingSequences, runAmplifierConfiguration) => {
 
     let largestOutputSignal = 0;
 
-    phaseSettingSequences.forEach(phaseSettingSequence => {
+    for (const phaseSettingSequence of phaseSettingSequences) {
 
-        const amplifierOutput = runAmplifierConfiguration(phaseSettingSequence);
+        const amplifierOutput = await runAmplifierConfiguration(phaseSettingSequence);
 
         if (amplifierOutput > largestOutputSignal) {
 
             largestOutputSignal = amplifierOutput;
         }
-    });
+    };
 
     return largestOutputSignal;
 };
@@ -466,16 +470,9 @@ const runAmplifiersInSeries = phaseSettingSequence => {
     return amplifierOutput;
 }
 
-
-// console.log(
-//     'Solution for part one:',
-//     findLargestOutputSignal(
-//         findAllPermutations([0, 1, 2, 3, 4]),
-//         runAmplifiersInSeries
-//     )
-// );
-
-
+/**
+ * A stateful computer.
+ */
 class Computer {
 
     constructor (name, inputValues, program) {
@@ -491,14 +488,30 @@ class Computer {
         };
     }
 
+    get lastOutput () {
+
+        return this.state.output.slice(-1)[0];
+    }
+
     setState (state) {
 
         this.state = state;
+
+        return this;
+    }
+
+    setHaltCallback (haltCallback) {
+
+        this.haltCallback = haltCallback;
+
+        return this;
     }
 
     setOutputSignalHandler (outputSignalHandler) {
 
         this.outputSignalHandler = outputSignalHandler;
+
+        return this;
     }
 
     addInputSignal (input) {
@@ -514,22 +527,18 @@ class Computer {
 
             this.setState(state);
 
-            console.log(this.name, 'pause - output', state.output.slice(-1)[0]);
-
-            this.outputSignalHandler.addInputSignal(
-                state.output.slice(-1)[0]
-            );
+            this.outputSignalHandler.addInputSignal(this.lastOutput);
         }
 
         if (signal === 'halt') {
 
-            console.log(this.name, signal, state);
+            if (this.haltCallback) {
+                this.haltCallback(null, state);
+            }
         }
     }
 
     start () {
-
-        console.log(this.name, 'start - input', this.state.inputValues[this.state.inputPosition]);
 
         compute(
             this.state.inputValues,
@@ -542,49 +551,72 @@ class Computer {
     }
 }
 
-
 /**
  * Runs all amplifiers in a feedback loop with a given phase setting sequence.
  *
  * @param {array<number>} phaseSettingSequence The phase setting sequence for the run.
- * @returns {number} The last amplifiers output value.
+ * @returns {Promise<number>} A promise on the last amplifiers output value.
  */
-const runAmplifierFeedbackLoop = phaseSettingSequence => {
+const runAmplifierFeedbackLoop = async phaseSettingSequence => {
 
-    let amplifierOutput = 0;
+    return new Promise((resolve, reject) => {
 
-    const amplifierA = new Computer('Amplifier A', [phaseSettingSequence[0], 0], readIntcodeProgram());
-    const amplifierB = new Computer('Amplifier B', [phaseSettingSequence[1]], readIntcodeProgram());
-    const amplifierC = new Computer('Amplifier C', [phaseSettingSequence[2]], readIntcodeProgram());
-    const amplifierD = new Computer('Amplifier D', [phaseSettingSequence[3]], readIntcodeProgram());
-    const amplifierE = new Computer('Amplifier E', [phaseSettingSequence[4]], readIntcodeProgram());
+        const amplifierA = new Computer('Amplifier A', [phaseSettingSequence[0], 0], readIntcodeProgram());
+        const amplifierB = new Computer('Amplifier B', [phaseSettingSequence[1]], readIntcodeProgram());
+        const amplifierC = new Computer('Amplifier C', [phaseSettingSequence[2]], readIntcodeProgram());
+        const amplifierD = new Computer('Amplifier D', [phaseSettingSequence[3]], readIntcodeProgram());
+        const amplifierE = new Computer('Amplifier E', [phaseSettingSequence[4]], readIntcodeProgram());
 
-    amplifierA.setOutputSignalHandler(amplifierB);
-    amplifierB.setOutputSignalHandler(amplifierC);
-    amplifierC.setOutputSignalHandler(amplifierD);
-    amplifierD.setOutputSignalHandler(amplifierE);
-    amplifierE.setOutputSignalHandler(amplifierA);
+        const getLastOutputOfAmplifierE = (error, result) => {
 
-    amplifierA.start();
+            if (error) {
+                reject(error);
+            }
 
-    return amplifierOutput;
+            resolve(amplifierE.lastOutput);
+        };
+
+        amplifierA
+            .setOutputSignalHandler(amplifierB)
+            .setHaltCallback(getLastOutputOfAmplifierE);
+
+        amplifierB
+            .setOutputSignalHandler(amplifierC)
+            .setHaltCallback(getLastOutputOfAmplifierE);
+
+        amplifierC
+            .setOutputSignalHandler(amplifierD)
+            .setHaltCallback(getLastOutputOfAmplifierE);
+
+        amplifierD
+            .setOutputSignalHandler(amplifierE)
+            .setHaltCallback(getLastOutputOfAmplifierE);
+
+        amplifierE
+            .setOutputSignalHandler(amplifierA)
+            .setHaltCallback(getLastOutputOfAmplifierE);
+
+        amplifierA.start();
+    });
 }
 
+// Await only works in function scope.
+(async () => {
 
-// console.log(
-//     findLargestOutputSignal(
-//         findAllPermutations([5, 6, 7, 8, 9]),
-//         runAmplifierFeedbackLoop
-//     )
-// )
+    console.log(
+        'Solution for part one:',
+        await findLargestOutputSignal(
+            findAllPermutations([0, 1, 2, 3, 4]),
+            runAmplifiersInSeries
+        )
+    );
 
+    console.log(
+        'Solution for part two:',
+        await findLargestOutputSignal(
+            findAllPermutations([5, 6, 7, 8, 9]),
+            runAmplifierFeedbackLoop
+        )
+    );
 
-console.log(
-
-    runAmplifierFeedbackLoop([5, 6, 7, 8, 9])
-)
-
-console.log(
-    'Solution for part two:',
-    0
-);
+})();
