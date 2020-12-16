@@ -22,7 +22,7 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
 /**
  * Finds two numbers in a given array by their sum.
  *
- * @param {Array<Number>} items The "haystack".
+ * @param {Array<Number>} items The potential terms.
  * @param {Number} sum The sum of the terms.
  * @returns {Array<Number>} The result.
  */
@@ -30,20 +30,54 @@ const findTwoNumbersByTheirSum = (items, sum) => {
 
     let result = [];
 
-    items.some(leftTerm => {
+    items.some(firstTerm => {
 
-        items.some(rightTerm => {
+        items.some(secondTerm => {
 
-            const isMatching = leftTerm + rightTerm === sum;
+            const isMatching = firstTerm + secondTerm === sum;
 
             if (isMatching) {
 
-                if (!result.includes(leftTerm)) {
-                    result.push(leftTerm, rightTerm);
+                if (!result.includes(firstTerm)) {
+                    result.push(firstTerm, secondTerm);
                 }
             }
 
             return isMatching
+        });
+    });
+
+    return result;
+};
+
+/**
+ * Finds thre numbers in a given array by their sum.
+ *
+ * @param {Array<Number>} items The potential terms.
+ * @param {Number} sum The sum of the terms.
+ * @returns {Array<Number>} The result.
+ */
+const findThreeNumbersByTheirSum = (items, sum) => {
+
+    let result = [];
+
+    items.some(firstTerm => {
+
+        items.some(secondTerm => {
+
+            items.some(thirdTerm => {
+
+                const isMatching = firstTerm + secondTerm + thirdTerm === sum;
+
+                if (isMatching) {
+
+                    if (!result.includes(firstTerm)) {
+                        result.push(firstTerm, secondTerm, thirdTerm);
+                    }
+                }
+
+                return isMatching
+            });
         });
     });
 
@@ -67,5 +101,6 @@ console.log(
 
 console.log(
     'Solution for part two:',
-    0
+    findThreeNumbersByTheirSum(readInput(), 2020)
+        .reduce(multiply)
 );
