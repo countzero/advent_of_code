@@ -20,12 +20,13 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
 };
 
 /**
- * Finds measurements that increase.
+ * Finds measurement groups that increase relative to the previous measurement group.
  *
- * @param {Array<Number>} measurements All measurements
- * @returns {Array<Number>} The result.
+ * @param {Array<Number>} measurements All raw measurement data points.
+ * @param {Number} groupSize The size of the measurement group.
+ * @returns {Array<Number>} All measurement data points that increase.
  */
-const findMeasurementsThatIncrease = (measurements) => {
+const findIncreasingMeasurementGroups = (measurements, groupSize = 1) => {
 
     const result = [];
 
@@ -33,11 +34,18 @@ const findMeasurementsThatIncrease = (measurements) => {
 
     measurements.forEach((measurement, index) => {
 
-        if (index !== 0 && measurement > previousMeasurement) {
-            result.push(measurement);
+        let iteration = groupSize;
+        let measurementSum = 0;
+
+        while (iteration--) {
+            measurementSum += measurements[index + iteration];
         }
 
-        previousMeasurement = measurement;
+        if (index !== 0 && measurementSum > previousMeasurement) {
+            result.push(measurementSum);
+        }
+
+        previousMeasurement = measurementSum;
     });
 
     return result;
@@ -45,5 +53,10 @@ const findMeasurementsThatIncrease = (measurements) => {
 
 console.log(
     'Solution for part one:',
-    findMeasurementsThatIncrease(readInput(), 2020)
+    findIncreasingMeasurementGroups(readInput()).length
+);
+
+console.log(
+    'Solution for part two:',
+    findIncreasingMeasurementGroups(readInput(), 3).length
 );
