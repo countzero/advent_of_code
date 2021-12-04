@@ -8,23 +8,24 @@ const path = require('path');
 /**
  * Reads the input items from a file.
  *
- * @param {String} relativeFilePath A file path relative to __dirname.
- * @param {String} encoding The input file encoding.
+ * @param {string} relativeFilePath A file path relative to __dirname.
+ * @param {string} encoding The input file encoding.
  * @returns {Array<Number>} The input items.
  */
 const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
 
-    return fs.readFileSync(path.resolve(__dirname, relativeFilePath), encoding)
-             .split(/\r?\n/)
-             .map(text => parseInt(text, 10));
+    return fs
+        .readFileSync(path.resolve(__dirname, relativeFilePath), encoding)
+        .split(/\r?\n/)
+        .map(text => parseInt(text, 10));
 };
 
 /**
  * Finds measurement groups that increase relative to the previous measurement group.
  *
- * @param {Array<Number>} measurements All raw measurement data points.
- * @param {Number} groupSize The size of the measurement group.
- * @returns {Array<Number>} All measurement data points that increase.
+ * @param {Array<number>} measurements All raw measurement data points.
+ * @param {number} groupSize The size of the measurement group.
+ * @returns {Array<number>} All measurement data points that increase.
  */
 const findIncreasingMeasurementGroups = (measurements, groupSize = 1) => {
 
