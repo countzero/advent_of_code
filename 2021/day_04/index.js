@@ -26,7 +26,6 @@ const getNumbers = input => input[0].split(',').map(number => parseInt(number, 1
 class BingoBoard {
 
     constructor(rows) {
-
         this.rows = rows;
         this.columns = this.getColumns(rows);
         this.markedNumbers = [];
@@ -34,6 +33,10 @@ class BingoBoard {
     }
 
     mark(number) {
+
+        if (this.hasWon === true) {
+            return;
+        }
 
         this.markedNumbers.push(number);
         this.setHasWon();
@@ -76,10 +79,11 @@ class BingoBoard {
     getScore() {
 
         const numbers = this.rows.flat();
-        const lastCalledNumber = this.markedNumbers.at(-1);
-        const unmarkedNumbers = numbers.filter(number => !this.markedNumbers.includes(number));
+        const unmarkedNumbers = numbers.filter(
+            number => !this.markedNumbers.includes(number)
+        );
 
-        return unmarkedNumbers.reduce((a, b) => a + b) * lastCalledNumber;
+        return unmarkedNumbers.reduce((a, b) => a + b) * this.markedNumbers.at(-1);
     }
 }
 
@@ -113,31 +117,39 @@ const getBoards = input => {
     return boards;
 };
 
-const findFirstWinningBingoBoard = (numbers, bingoBoards) => {
+const findAllWinningBingoBoards = (numbers, bingoBoards) => {
 
-    let winnerBingoBoard;
+    const winningBingoBoards = [];
 
-    for (let index = 0; index < numbers.length; index++) {
+    numbers.forEach(calledNumber => {
 
-        winnerBingoBoard = bingoBoards.find(bingoBoard => {
+        const winnerBingoBoard = bingoBoards.find(bingoBoard => {
 
-            bingoBoard.mark(numbers[index]);
+            bingoBoard.mark(calledNumber);
 
             return bingoBoard.hasWon;
         })
 
-        if (winnerBingoBoard !== undefined) {
-            break;
+        if (winnerBingoBoard !== undefined && !winningBingoBoards.includes(winnerBingoBoard)) {
+            winningBingoBoards.push(winnerBingoBoard);
         }
-    }
+    });
 
-    return winnerBingoBoard;
+    return winningBingoBoards;
 };
 
 console.log(
     'Solution for part one:',
-    findFirstWinningBingoBoard(
+    findAllWinningBingoBoards(
         getNumbers(readInput()),
         getBoards(readInput())
-    ).getScore()
+    ).at(0).getScore()
+);
+
+console.log(
+    'WRONG Solution for part two:',
+    findAllWinningBingoBoards(
+        getNumbers(readInput()),
+        getBoards(readInput())
+    ).at(-1).getScore()
 );
