@@ -20,9 +20,6 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
         .split(/\r?\n/);
 };
 
-
-const getNumbers = input => input[0].split(',').map(number => parseInt(number, 10))
-
 class BingoBoard {
 
     constructor(rows) {
@@ -30,6 +27,7 @@ class BingoBoard {
         this.columns = this.getColumns(rows);
         this.markedNumbers = [];
         this.hasWon = false;
+        this.score = 0;
     }
 
     mark(number) {
@@ -74,18 +72,22 @@ class BingoBoard {
         );
 
         this.hasWon = fullRow || fullColumn;
+
+        this.setScore();
     }
 
-    getScore() {
+    setScore() {
 
         const numbers = this.rows.flat();
         const unmarkedNumbers = numbers.filter(
             number => !this.markedNumbers.includes(number)
         );
 
-        return unmarkedNumbers.reduce((a, b) => a + b) * this.markedNumbers.at(-1);
+        this.score = unmarkedNumbers.reduce((a, b) => a + b) * this.markedNumbers.at(-1);
     }
 }
+
+const getNumbers = input => input[0].split(',').map(number => parseInt(number, 10))
 
 const getBoards = input => {
 
@@ -123,16 +125,14 @@ const findAllWinningBingoBoards = (numbers, bingoBoards) => {
 
     numbers.forEach(calledNumber => {
 
-        const winnerBingoBoard = bingoBoards.find(bingoBoard => {
+        bingoBoards.forEach(bingoBoard => {
 
             bingoBoard.mark(calledNumber);
 
-            return bingoBoard.hasWon;
+            if (bingoBoard.hasWon && !winningBingoBoards.includes(bingoBoard)) {
+                winningBingoBoards.push(bingoBoard);
+            }
         })
-
-        if (winnerBingoBoard !== undefined && !winningBingoBoards.includes(winnerBingoBoard)) {
-            winningBingoBoards.push(winnerBingoBoard);
-        }
     });
 
     return winningBingoBoards;
@@ -143,13 +143,13 @@ console.log(
     findAllWinningBingoBoards(
         getNumbers(readInput()),
         getBoards(readInput())
-    ).at(0).getScore()
+    ).at(0).score
 );
 
 console.log(
-    'WRONG Solution for part two:',
+    'Solution for part two:',
     findAllWinningBingoBoards(
         getNumbers(readInput()),
         getBoards(readInput())
-    ).at(-1).getScore()
+    ).at(-1).score
 );
