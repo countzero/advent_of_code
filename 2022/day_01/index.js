@@ -71,5 +71,7 @@ console.log(
 
 console.log(
     'Solution for part two:',
-
+    calculateTotalCaloriesPerElf(readInput())[0] +
+    calculateTotalCaloriesPerElf(readInput())[1] +
+    calculateTotalCaloriesPerElf(readInput())[2]
 );
