@@ -43,17 +43,6 @@ const getDefaultGameRules = () => {
 
 const getSpecialGameRules = () => {
 
-    // X = Loose
-    // Y = Draw
-    // Z = Win
-
-    // Rock = 1
-    // Paper = 2
-    // Scissor = 3
-    // Win = 6
-    // Draw = 3
-    // Loose = 0
-
     return {
         'BX': 1, // We need to loose vs. Paper = Rock
         'CX': 2, // We need to loose vs. Scissor = Paper
