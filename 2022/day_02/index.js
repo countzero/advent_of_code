@@ -41,6 +41,32 @@ const getDefaultGameRules = () => {
     }
 };
 
+const getSpecialGameRules = () => {
+
+    // X = Loose
+    // Y = Draw
+    // Z = Win
+
+    // Rock = 1
+    // Paper = 2
+    // Scissor = 3
+    // Win = 6
+    // Draw = 3
+    // Loose = 0
+
+    return {
+        'BX': 1, // We need to loose vs. Paper = Rock
+        'CX': 2, // We need to loose vs. Scissor = Paper
+        'AX': 3, // We need to loose vs. Rock = Scissor
+        'AY': 4, // We need to draw vs. Rock = Rock
+        'BY': 5, // We need to draw vs. Paper = Paper
+        'CY': 6, // We need to draw vs. Scissor = Scissor
+        'CZ': 7, // We need to win vs. Scissor = Rock
+        'AZ': 8, // We need to win vs. Rock = Paper
+        'BZ': 9, // We need to win vs. Paper = Scissor
+    }
+};
+
 const calculateTotalScore = (strategy, rules) => {
 
     return strategy.reduce(
@@ -59,4 +85,8 @@ console.log(
 
 console.log(
     'Solution for part two:',
+    calculateTotalScore(
+        readInput(),
+        getSpecialGameRules()
+    )
 );
