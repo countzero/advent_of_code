@@ -20,28 +20,67 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
         .slice(0, -1)
         .map(
             text => [
-                text,
-                text.substring(0, text.length / 2),
-                text.substring(text.length / 2),
+                text.substring(0, text.length / 2).split(''),
+                text.substring(text.length / 2).split(''),
             ]
         );
 };
 
+const findDuplicateItem = inventory => {
 
-const calculateTotalScore = (strategy, rules) => {
+    const duplicates = [];
 
-    return strategy.reduce(
-        (accumulator, move) => accumulator + rules[`${move[0]}${move[1]}`],
-        0
-    )
+    inventory[0].forEach(item => {
+
+        if (!inventory[1].includes(item)) {
+            return;
+        }
+
+        if (duplicates.includes(item)) {
+            return;
+        }
+
+        duplicates.push(item);
+    });
+
+    return duplicates[0];
+};
+
+const getUnicodeCharacters = (start, length) => {
+
+    return Array
+        .from(Array(length))
+        .map(
+            (item, index) => String.fromCharCode(index + start)
+        )
 }
 
-console.log(
-    readInput()
+const getLowerCaseAlphabet = () => getUnicodeCharacters(97, 26);
+
+const getUpperCaseAlphabet = () => getUnicodeCharacters(65, 26);
+
+const calculateTotalPrioritiesOfItems = items => {
+
+    const itemsPriority = (new Array(1)).concat(
+        getLowerCaseAlphabet(),
+        getUpperCaseAlphabet()
+    );
+
+    return items.reduce(
+        (accumulator, item) => accumulator + itemsPriority.indexOf(item),
+        0
+    )
+};
+
+const findDuplicateItems = inventories => inventories.map(
+    inventory => findDuplicateItem(inventory)
 );
 
 console.log(
     'Solution for part one:',
+    calculateTotalPrioritiesOfItems(
+        findDuplicateItems(readInput())
+    )
 );
 
 console.log(
