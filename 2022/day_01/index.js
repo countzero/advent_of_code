@@ -47,11 +47,11 @@ const calculateTotalCaloriesPerElf = inventory => {
 
     const descendingByValue = (a, b) => {
 
-        if (a <= b) {
+        if (a < b) {
             return 1;
         }
 
-        if (a => b) {
+        if (a > b) {
             return -1;
         }
 
