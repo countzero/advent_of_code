@@ -27,7 +27,25 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
 };
 
 const findAssignmentPairsWithFullOverlap = assignmentPairs => assignmentPairs.filter(
-    ids => (ids[0] - ids[2]) * (ids[1] - ids[3]) <= 0
+
+    ([firstStart, firstEnd, secondStart, secondEnd]) => {
+
+        const firstAssignmentContainsSecond = secondStart >= firstStart && secondEnd <= firstEnd;
+        const secondAssignmentContainsFirst = firstStart >= secondStart && firstEnd <= secondEnd;
+
+        return firstAssignmentContainsSecond || secondAssignmentContainsFirst;
+    }
+);
+
+const findAssignmentPairsWithPartialOverlap = assignmentPairs => assignmentPairs.filter(
+
+    ([firstStart, firstEnd, secondStart, secondEnd]) => {
+
+        const secondAssignmentOverlapsFirst = secondStart <= firstEnd && secondStart >= firstStart;
+        const firstAssignmentOverlapsSecond = firstStart <= secondEnd && firstStart >= secondStart;
+
+        return secondAssignmentOverlapsFirst || firstAssignmentOverlapsSecond;
+    }
 );
 
 console.log(
@@ -39,5 +57,7 @@ console.log(
 
 console.log(
     'Solution for part two:',
-
+    findAssignmentPairsWithPartialOverlap(
+        readInput()
+    ).length
 );
