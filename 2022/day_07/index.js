@@ -32,7 +32,7 @@ class Directory {
     }
 
     filesSize () {
-        return this.files.reduce((result, file) => result += parseInt(file[0], 10), 0);
+        return this.files.reduce((result, file) => result += Number(file[0]), 0);
     }
 
     directoriesSize () {
@@ -71,14 +71,14 @@ class Directory {
     }
 }
 
-const findDirectoriesByMaximumSize = (directory, maximumSize, result = []) => {
+const findDirectoriesBySize = (directory, minimum = 0, maximum = Number.MAX_SAFE_INTEGER, result = []) => {
 
-    if (directory.size() <= maximumSize) {
+    if (directory.size() <= maximum && directory.size() >= minimum) {
         result.push(directory);
     }
 
     directory.children.forEach(child => {
-        findDirectoriesByMaximumSize(child, maximumSize, result);
+        findDirectoriesBySize(child, minimum, maximum, result);
     });
 
     return result;
@@ -110,13 +110,27 @@ const createDirectoryTree = history => {
 
 const calculateTotalSize = directories => directories.reduce((result, directory) => result += directory.size(), 0);
 
+const findDeleteCandidates = rootDirectory => {
+
+    const totalDiskSpace = 70000000;
+    const minimumRequiredSpace = 30000000;
+    const freeDiskSpace = totalDiskSpace - rootDirectory.size();
+    const requiredDiskSpace = minimumRequiredSpace - freeDiskSpace;
+
+    return findDirectoriesBySize(
+        rootDirectory,
+        requiredDiskSpace
+    )
+};
+
 console.log(
     'Solution for part one:',
     calculateTotalSize(
-        findDirectoriesByMaximumSize(
+        findDirectoriesBySize(
             createDirectoryTree(
                 readInput()
             ),
+            0,
             100000
         )
     ),
@@ -124,4 +138,11 @@ console.log(
 
 console.log(
     'Solution for part two:',
+    Math.min(
+        ...findDeleteCandidates(
+            createDirectoryTree(
+                readInput()
+            )
+        ).map(directory => directory.size())
+    )
 );
