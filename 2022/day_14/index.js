@@ -103,22 +103,25 @@ const pointIsFree = (rockCoordinates, sandCoordinates, x, y) => {
     );
 }
 
+const getLowestRockPosition = rockCoordinates => rockCoordinates.reduce(
+    (aggregate, point) => point[1] > aggregate ? point[1] : aggregate,
+    0
+);
+
 const simulate = rockCoordinates => {
 
+    const origin = [500, 0];
     const sandCoordinates = [];
-    const lowestRockPosition = rockCoordinates.reduce(
-        (aggregate, point) => point[1] > aggregate ? point[1] : aggregate,
-        0
-    );
+    const beneathFloorPosition = getLowestRockPosition(rockCoordinates) + 3;
 
-    let x = 500;
-    let y = 0;
+    let x = origin[0];
+    let y = origin[1];
 
     while (true) {
 
         // We assume that a sand unit is in free fall
-        // if it is below the lowest rock position.
-        if (y > lowestRockPosition) {
+        // if it is below the floor rock position.
+        if (y > beneathFloorPosition) {
             break;
         }
 
@@ -142,15 +145,37 @@ const simulate = rockCoordinates => {
             continue;
         }
 
+        if (y > beneathFloorPosition) {
+            break;
+        }
+
         // We assume, that the sand unit is settled.
         sandCoordinates.push([x, y]);
 
+        // The cave is filled if the sand unit settles in the origin.
+        if (x === origin[0] && y === origin[1]) {
+            break;
+        }
+
         // We are emitting a new sand unit at the origin.
-        x = 500;
-        y = 0;
+        x = origin[0];
+        y = origin[1];
     }
 
     return sandCoordinates;
+}
+
+const addFloor = rockCoordinates => {
+
+    const result = rockCoordinates;
+    const y = getLowestRockPosition(rockCoordinates) + 2;
+    let x = 1000;
+
+    while (x--) {
+        result.push([x, y])
+    }
+
+    return result;
 }
 
 console.log(
@@ -163,5 +188,12 @@ console.log(
 );
 
 console.log(
-    'Solution for part two:'
+    'Solution for part two:',
+    simulate(
+        addFloor(
+            calculateRockCoordinates(
+                readInput()
+            )
+        )
+    ).length
 );
