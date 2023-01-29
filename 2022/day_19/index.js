@@ -35,7 +35,9 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
                     geodeRobot: [values[5], 0, values[6]],
                 },
 
-                // We are limiting the needed robots by the
+                // We are calculating the maximum required robots
+                // based on the required materials to reduce the
+                // total number of execution paths.
                 limits: {
                     oreRobot: Math.max(values[1], values[2], values[3], values[5]),
                     clayRobot: values[4],
@@ -48,31 +50,34 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
         })
 };
 
-const composeInitialInventory = blueprintId => (
-    {
-        blueprintId,
-        oreRobot: 1,
-        clayRobot: 0,
-        obsidianRobot: 0,
-        geodeRobot: 0,
-        ore: 0,
-        clay: 0,
-        obsidian: 0,
-        geode: 0,
-        ordered: {
-            oreRobot: 0,
-            clayRobot: 0,
-            obsidianRobot: 0,
-            geodeRobot: 0,
-        }
-    }
-);
+const calculateQualityLevels = (blueprints, durationInMinutes) => {
 
-const mineResources = inventory => {
-    inventory.ore += inventory.oreRobot;
-    inventory.clay += inventory.clayRobot;
-    inventory.obsidian += inventory.obsidianRobot;
-    inventory.geode += inventory.geodeRobot;
+    return blueprints.map(
+        blueprint => {
+
+            const inventories = [
+                {
+                    oreRobot: 1,
+                    clayRobot: 0,
+                    obsidianRobot: 0,
+                    geodeRobot: 0,
+                    ore: 0,
+                    clay: 0,
+                    obsidian: 0,
+                    geode: 0,
+                }
+            ];
+
+            traverseDecisionTree(blueprint, durationInMinutes, inventories);
+
+            const highestGeodeCount = inventories.reduce(
+                (maxGeodes, inventory) => (inventory.geode > maxGeodes) ? inventory.geode : maxGeodes,
+                0
+            );
+
+            return highestGeodeCount * blueprint.id;
+        }
+    );
 };
 
 const canProduce = (type, blueprint, inventory) => Boolean(
@@ -83,7 +88,7 @@ const canProduce = (type, blueprint, inventory) => Boolean(
 
 const shouldProduce = (type, blueprint, inventory, minutesLeft) => {
 
-    const minutesLeftLimit = {
+     const minutesLeftLimit = {
         oreRobot: 16,
         clayRobot: 6,
         obsidianRobot: 3,
@@ -91,190 +96,110 @@ const shouldProduce = (type, blueprint, inventory, minutesLeft) => {
     };
 
     if (minutesLeft < minutesLeftLimit[type]) {
-        console.log(
-            `[!] Should not produce ${type} with ${minutesLeft} minutes left.`,
-        );
         return false;
     };
 
+    // We are limiting the number of a specific robot type
+    // based on the required resources to build other robots.
     if (inventory[type] === blueprint.limits[type]) {
-
-        console.log(
-            `[!] Should not produce ${type} when already ${blueprint.limits[type]} produced.`,
-        );
         return false;
     };
 
-    // // We do not want to build clay robots before enoz
-    // if (type === 'clayRobot' && inventory['oreRobot'] < blueprint.limits['oreRobot']) {
-
-    //     console.log(
-    //         `[!] Should not produce clayRobot before oreRobot limit of ${blueprint.limits['oreRobot']} has reached.`,
-    //     );
-    //     return false;
-    // }
-
+    // We are not building a "higher" robot before at least one
+    // "lower" robot has been produced.
     if (type === 'obsidianRobot' && inventory['clayRobot'] === 0) {
-        console.log(
-            '[!] Should not produce obsidianRobot before clayRobot has been built.',
-        );
         return false;
     }
 
      if (type === 'geodeRobot' && inventory['obsidianRobot'] === 0) {
-        console.log(
-            '[!] Should not produce geodeRobot before obsidianRobot has been built.',
-        );
         return false;
     }
 
     return true;
 };
 
-const maybeProduce = (type, blueprint, inventory, minutesLeft) => {
+const evaluateNextBuildOptions = (blueprint, inventory, minutesLeft) => {
 
-    if (!canProduce(type, blueprint, inventory)) {
-        return false;
-    }
-
-    if (!shouldProduce(type, blueprint, inventory, minutesLeft)) {
-        return false;
-    }
-
-    console.log('[+]', type);
-
-    inventory.ore -= blueprint.costs[type][0];
-    inventory.clay -= blueprint.costs[type][1];
-    inventory.obsidian -= blueprint.costs[type][2];
-
-    inventory.ordered[type] += 1;
-
-    return true;
-};
-
-const orderProductionOfRobots = (blueprint, inventory, minutesLeft) => {
-
-    console.log(
-        'available resources',
-        {
-            ore: inventory.ore,
-            clay: inventory.clay,
-            obsidian: inventory.obsidian,
-            geode: inventory.geode,
-        }
-    );
-
-    maybeProduce('geodeRobot', blueprint, inventory, minutesLeft);
-    maybeProduce('obsidianRobot', blueprint, inventory, minutesLeft);
-    maybeProduce('clayRobot', blueprint, inventory, minutesLeft);
-    maybeProduce('oreRobot', blueprint, inventory, minutesLeft);
-};
-
-const collectProducedRobots = inventory => {
+    // To _not_ build a new robot is always a valid option.
+    const robotTypes = [
+        null,
+    ];
 
     [
         'oreRobot',
         'clayRobot',
         'obsidianRobot',
         'geodeRobot',
+
     ].forEach(type => {
-        inventory[type] += inventory.ordered[type];
-        inventory.ordered[type] = 0;
+
+        if (!canProduce(type, blueprint, inventory)) {
+            return false;
+        }
+
+        if (!shouldProduce(type, blueprint, inventory, minutesLeft)) {
+            return false;
+        }
+
+        robotTypes.push(type);
     });
 
-    console.log(
-        'collectProducedRobots',
-        {
-            oreRobot: inventory.oreRobot,
-            clayRobot: inventory.clayRobot,
-            obsidianRobot: inventory.obsidianRobot,
-            geodeRobot: inventory.geodeRobot,
-        }
-    );
+    return robotTypes;
 };
 
-const execute = (blueprint, inventory, minutesLeft) => {
+const mine = inventory => {
 
-    orderProductionOfRobots(blueprint, inventory, minutesLeft);
-
-    mineResources(inventory);
-
-    collectProducedRobots(inventory);
-
-    return inventory;
+    inventory.ore += inventory.oreRobot;
+    inventory.clay += inventory.clayRobot;
+    inventory.obsidian += inventory.obsidianRobot;
+    inventory.geode += inventory.geodeRobot;
 };
 
-const calculateQualityLevel = inventory => {
-    inventory.qualityLevel = inventory.blueprintId * inventory.geode;
-};
+const maybeBuild = (inventory, blueprint, robotType) => {
 
-const dryRun = (blueprints, durationInMinutes) => {
+    if (robotType === null) {
+        return;
+    }
 
-    blueprints = [
-        {
-            id: 1,
-            costs: {
-                oreRobot: [4, 0, 0],
-                clayRobot: [2, 0, 0],
-                obsidianRobot: [3, 14, 0],
-                geodeRobot: [2, 0, 7],
-            },
-            limits: {
-                oreRobot: 4,
-                clayRobot: 5,
-                obsidianRobot: 7,
-                geodeRobot: Infinity,
-            },
-        }
-    ];
+    inventory.ore -= blueprint.costs[robotType][0];
+    inventory.clay -= blueprint.costs[robotType][1];
+    inventory.obsidian -= blueprint.costs[robotType][2];
 
-    return blueprints.map(
-        blueprint => {
+    inventory[robotType] += 1;
+}
 
-            let minutesLeft = durationInMinutes;
-            let inventory = composeInitialInventory(blueprint.id);
+const traverseDecisionTree = (blueprint, minutesLeft, inventories, pathId = 0, robotType = null) => {
 
-            while (minutesLeft--) {
+    mine(inventories[pathId]);
 
-                console.log(`\n== Minute ${durationInMinutes - minutesLeft} ==`);
+    maybeBuild(inventories[pathId], blueprint, robotType);
 
-                inventory = execute(blueprint, inventory, minutesLeft);
-            }
+    minutesLeft -= 1;
 
-            calculateQualityLevel(inventory);
+    if (minutesLeft === 0) {
+        return inventories;
+    }
 
-            return inventory;
-        }
-    );
-};
+    evaluateNextBuildOptions(blueprint, inventories[pathId], minutesLeft)
+        .forEach(robotType => {
 
-// console.log(
+            inventories.push(
+                {
+                    ...inventories[pathId]
+                }
+            );
 
-//     readInput()
-//         .map(blueprint => (
-//             {
-//                 id: blueprint.id,
-//                 ...blueprint.costs,
-//             }
-//         )
-//     )
-// );
-
-// console.log(
-
-//     dryRun(
-//         readInput(),
-//         24
-//     )
-// );
+            traverseDecisionTree(blueprint, minutesLeft, inventories, inventories.length - 1, robotType);
+        });
+}
 
 console.log(
     'Solution for part one:',
-    dryRun(
+    calculateQualityLevels(
         readInput(),
         24
     ).reduce(
-        (qualityLevelSum, inventory) => qualityLevelSum + inventory.qualityLevel,
+        (sum, qualityLevel) => sum + qualityLevel,
         0
     )
 );
