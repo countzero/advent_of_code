@@ -50,32 +50,25 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
         })
 };
 
-const calculateQualityLevels = (blueprints, durationInMinutes) => {
+const calculateHighestGeodeCount = (blueprints, durationInMinutes, timeLimits) => {
 
     return blueprints.map(
         blueprint => {
 
-            const inventories = [
-                {
-                    oreRobot: 1,
-                    clayRobot: 0,
-                    obsidianRobot: 0,
-                    geodeRobot: 0,
-                    ore: 0,
-                    clay: 0,
-                    obsidian: 0,
-                    geode: 0,
-                }
-            ];
+            const state = {
+                oreRobot: 1,
+                clayRobot: 0,
+                obsidianRobot: 0,
+                geodeRobot: 0,
+                ore: 0,
+                clay: 0,
+                obsidian: 0,
+                geode: 0,
+            };
 
-            traverseDecisionTree(blueprint, durationInMinutes, inventories);
+            const result = traverseDecisionTree(blueprint, state, durationInMinutes, timeLimits);
 
-            const highestGeodeCount = inventories.reduce(
-                (maxGeodes, inventory) => (inventory.geode > maxGeodes) ? inventory.geode : maxGeodes,
-                0
-            );
-
-            return highestGeodeCount * blueprint.id;
+            return result.sort().pop();
         }
     );
 };
@@ -86,16 +79,11 @@ const canProduce = (type, blueprint, inventory) => Boolean(
     inventory.obsidian >= blueprint.costs[type][2]
 );
 
-const shouldProduce = (type, blueprint, inventory, minutesLeft) => {
+const shouldProduce = (type, blueprint, inventory, minutesLeft, timeLimits) => {
 
-     const minutesLeftLimit = {
-        oreRobot: 16,
-        clayRobot: 6,
-        obsidianRobot: 3,
-        geodeRobot: 2,
-    };
-
-    if (minutesLeft < minutesLeftLimit[type]) {
+    // We are not building specific robots when
+    // only a specific time frame is left.
+    if (minutesLeft < timeLimits[type]) {
         return false;
     };
 
@@ -105,20 +93,10 @@ const shouldProduce = (type, blueprint, inventory, minutesLeft) => {
         return false;
     };
 
-    // We are not building a "higher" robot before at least one
-    // "lower" robot has been produced.
-    if (type === 'obsidianRobot' && inventory['clayRobot'] === 0) {
-        return false;
-    }
-
-     if (type === 'geodeRobot' && inventory['obsidianRobot'] === 0) {
-        return false;
-    }
-
     return true;
 };
 
-const evaluateNextBuildOptions = (blueprint, inventory, minutesLeft) => {
+const evaluateNextBuildOptions = (blueprint, inventory, minutesLeft, timeLimits) => {
 
     // To _not_ build a new robot is always a valid option.
     const robotTypes = [
@@ -137,7 +115,7 @@ const evaluateNextBuildOptions = (blueprint, inventory, minutesLeft) => {
             return false;
         }
 
-        if (!shouldProduce(type, blueprint, inventory, minutesLeft)) {
+        if (!shouldProduce(type, blueprint, inventory, minutesLeft, timeLimits)) {
             return false;
         }
 
@@ -166,44 +144,71 @@ const maybeBuild = (inventory, blueprint, robotType) => {
     inventory.obsidian -= blueprint.costs[robotType][2];
 
     inventory[robotType] += 1;
-}
+};
 
-const traverseDecisionTree = (blueprint, minutesLeft, inventories, pathId = 0, robotType = null) => {
 
-    mine(inventories[pathId]);
+const traverseDecisionTree = (blueprint, state, minutesLeft, timeLimits, robotType = null, result = []) => {
 
-    maybeBuild(inventories[pathId], blueprint, robotType);
+    mine(state);
+
+    maybeBuild(state, blueprint, robotType);
 
     minutesLeft -= 1;
 
     if (minutesLeft === 0) {
-        return inventories;
+
+        if (!result.includes(state.geode)) {
+            result.push(state.geode);
+        }
+
+        return result;
     }
 
-    evaluateNextBuildOptions(blueprint, inventories[pathId], minutesLeft)
-        .forEach(robotType => {
+    evaluateNextBuildOptions(blueprint, state, minutesLeft, timeLimits)
+        .forEach(
+            robotType => traverseDecisionTree(
+                blueprint,
+                { ...state },
+                minutesLeft,
+                timeLimits,
+                robotType,
+                result
+            )
+        );
 
-            inventories.push(
-                {
-                    ...inventories[pathId]
-                }
-            );
-
-            traverseDecisionTree(blueprint, minutesLeft, inventories, inventories.length - 1, robotType);
-        });
+    return result;
 }
 
 console.log(
     'Solution for part one:',
-    calculateQualityLevels(
+    calculateHighestGeodeCount(
         readInput(),
-        24
+        24,
+        {
+            oreRobot: 16,
+            clayRobot: 6,
+            obsidianRobot: 3,
+            geodeRobot: 2,
+        }
     ).reduce(
-        (sum, qualityLevel) => sum + qualityLevel,
+        (result, highestGeodeCount, index) => result + (highestGeodeCount * index + 1),
         0
     )
 );
 
 console.log(
-    'Solution for part two:'
+    'Solution for part two:',
+    calculateHighestGeodeCount(
+        readInput().slice(0, 3),
+        32,
+        {
+            oreRobot: 24,
+            clayRobot: 12,
+            obsidianRobot: 8,
+            geodeRobot: 2,
+        }
+    ).reduce(
+        (result, highestGeodeCount) => result * highestGeodeCount,
+        1
+    )
 );
