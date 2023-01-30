@@ -38,7 +38,7 @@ const readInput = (relativeFilePath = './input.txt', encoding = 'utf8') => {
                 // We are calculating the maximum required robots
                 // based on the required materials to reduce the
                 // total number of execution paths.
-                limits: {
+                typeLimits: {
                     oreRobot: Math.max(values[1], values[2], values[3], values[5]),
                     clayRobot: values[4],
                     obsidianRobot: values[6],
@@ -55,6 +55,8 @@ const calculateHighestGeodeCount = (blueprints, durationInMinutes, timeLimits) =
     return blueprints.map(
         blueprint => {
 
+            const startDate = new Date();
+
             const state = {
                 oreRobot: 1,
                 clayRobot: 0,
@@ -66,9 +68,11 @@ const calculateHighestGeodeCount = (blueprints, durationInMinutes, timeLimits) =
                 geode: 0,
             };
 
-            const result = traverseDecisionTree(blueprint, state, durationInMinutes, timeLimits);
+            const geodeCounts = traverseDecisionTree(blueprint, state, durationInMinutes, timeLimits);
 
-            return result.sort().pop();
+            return geodeCounts
+                .sort((a, b) => a - b)
+                .slice(-1)[0];
         }
     );
 };
@@ -82,14 +86,17 @@ const canProduce = (type, blueprint, inventory) => Boolean(
 const shouldProduce = (type, blueprint, inventory, minutesLeft, timeLimits) => {
 
     // We are not building specific robots when
-    // only a specific time frame is left.
+    // less than a specific time frame is left.
     if (minutesLeft < timeLimits[type]) {
+
         return false;
     };
 
     // We are limiting the number of a specific robot type
     // based on the required resources to build other robots.
-    if (inventory[type] === blueprint.limits[type]) {
+    // Note: We can only produce _one_ robot per cycle!
+    if (inventory[type] === blueprint.typeLimits[type]) {
+
         return false;
     };
 
@@ -111,11 +118,11 @@ const evaluateNextBuildOptions = (blueprint, inventory, minutesLeft, timeLimits)
 
     ].forEach(type => {
 
-        if (!canProduce(type, blueprint, inventory)) {
+        if (!shouldProduce(type, blueprint, inventory, minutesLeft, timeLimits)) {
             return false;
         }
 
-        if (!shouldProduce(type, blueprint, inventory, minutesLeft, timeLimits)) {
+        if (!canProduce(type, blueprint, inventory)) {
             return false;
         }
 
@@ -133,11 +140,7 @@ const mine = inventory => {
     inventory.geode += inventory.geodeRobot;
 };
 
-const maybeBuild = (inventory, blueprint, robotType) => {
-
-    if (robotType === null) {
-        return;
-    }
+const build = (inventory, blueprint, robotType) => {
 
     inventory.ore -= blueprint.costs[robotType][0];
     inventory.clay -= blueprint.costs[robotType][1];
@@ -146,12 +149,13 @@ const maybeBuild = (inventory, blueprint, robotType) => {
     inventory[robotType] += 1;
 };
 
-
 const traverseDecisionTree = (blueprint, state, minutesLeft, timeLimits, robotType = null, result = []) => {
 
     mine(state);
 
-    maybeBuild(state, blueprint, robotType);
+    if (robotType !== null) {
+        build(state, blueprint, robotType);
+    }
 
     minutesLeft -= 1;
 
@@ -177,7 +181,7 @@ const traverseDecisionTree = (blueprint, state, minutesLeft, timeLimits, robotTy
         );
 
     return result;
-}
+};
 
 console.log(
     'Solution for part one:',
@@ -191,7 +195,7 @@ console.log(
             geodeRobot: 2,
         }
     ).reduce(
-        (result, highestGeodeCount, index) => result + (highestGeodeCount * index + 1),
+        (result, highestGeodeCount, index) => result + (highestGeodeCount * (index + 1)),
         0
     )
 );
@@ -202,9 +206,9 @@ console.log(
         readInput().slice(0, 3),
         32,
         {
-            oreRobot: 24,
-            clayRobot: 12,
-            obsidianRobot: 8,
+            oreRobot: 22,
+            clayRobot: 10,
+            obsidianRobot: 6,
             geodeRobot: 2,
         }
     ).reduce(
