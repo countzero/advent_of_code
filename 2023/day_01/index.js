@@ -10,10 +10,7 @@ pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet`;
 
-assert.deepEqual(
-    await solvePartOne(input),
-    142
-);
+assert.deepStrictEqual(await solvePartOne(input), 142);
 
 input = `two1nine
 eightwothree
@@ -23,10 +20,7 @@ xtwone3four
 zoneight234
 7pqrstsixteen`;
 
-assert.deepEqual(
-    await solvePartTwo(input),
-    281
-);
+assert.deepStrictEqual(await solvePartTwo(input), 281);
 
 input = await fs.promises.readFile('./input.txt', 'utf-8');
 

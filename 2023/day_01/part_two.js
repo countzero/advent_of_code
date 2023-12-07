@@ -1,51 +1,49 @@
 /**
- * Mapping from English words to numbers
+ * @param {string} input
+ * @returns {number}
  */
-const numberTerms = {
-    "zero": 0,
-    "one" : 1,
-    "two" : 2,
-    "three" : 3,
-    "four" : 4,
-    "five" : 5,
-    "six" : 6,
-    "seven" : 7,
-    "eight" : 8,
-    "nine" : 9,
-}
+const main = (input) => {
+    const listNumbers = [ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine' ];
+    const lines = input.split("\n");
+    let sum = 0;
 
-/**
- * Finds first and last numbers in a line, expressed as digits or spelled in English.
- * Builds a number from them (first * 10 + last) and returns it.
- *
- * @param {string} line - A line from the calibration document.
- *
- * @returns {number} - The calibration value of the line.
- */
-const extractNumber = (line) => {
-    const words = line.split(/(\D+)/);
+    for (const line of lines) {
+      let first = null, last = null;
+      for (let index = 0; index < line.length; index++) {
+        const end_index = line.length - index - 1;
+        if (first === null) {
+          if (/\d/.test(line[index])) {
+            first = +line[index];
+          } else {
+            for (let num = 1; num < listNumbers.length; num++) {
+              if (line.startsWith(listNumbers[num], index)) {
+                first = num;
+                break;
+              }
+            }
+          }
+        }
 
-    const firstNumber = words.find(word => word.match(/(\d+)|zero|one|two|three|four|five|six|seven|eight|nine/));
-    const lastNumber = words.reverse().find(word => word.match(/(\d+)|zero|one|two|three|four|five|six|seven|eight|nine/));
+        if (last === null) {
+          if (/\d/.test(line[end_index])) {
+            last = +line[end_index];
+          } else {
+            for (let num = 1; num < listNumbers.length; num++) {
+              if (line.startsWith(listNumbers[num], end_index - listNumbers[num].length + 1)) {
+                last = num;
+                break;
+              }
+            }
+          }
+        }
 
-    const firstDigit = isNaN(Number(firstNumber)) ? numberTerms[firstNumber] : Number(firstNumber);
-    const lastDigit = isNaN(Number(lastNumber)) ? numberTerms[lastNumber] : Number(lastNumber);
+        if (first !== null && last !== null) break;
+      }
 
-    return firstDigit * 10 + lastDigit;
-}
+      sum += first * 10 + last;
+    }
 
-/**
- * Sums up all the calibration values in the document.
- *
- * @param {string} document - The calibration document.
- *
- * @returns {number} - Sum of all calibration values.
- */
-const main = (document) => {
-
-    const lines = document.split('\n');
-
-    return lines.reduce((sum, line) => sum + extractNumber(line), 0);
-}
+    return sum;
+  };
 
 export default main;

@@ -8,11 +8,12 @@ Adhere strictly to the following rules:
 6. The main function of the program must return the result.
 7. Every JavaScript function must have a valid and complete JSDoc comment.
 8. Do not give any explanation outside the code block.
+9. Check the implementation with the provided unit test.
 
 The program must fulfill the following unit test:
 
 ```JavaScript
-assert.deepEqual(
+assert.deepStrictEqual(
     await main(
 `two1nine
 eightwothree
