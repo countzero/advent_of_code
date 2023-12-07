@@ -1,52 +1,51 @@
-import { promises as fs } from 'fs';
+/**
+ * Mapping from English words to numbers
+ */
+const numberTerms = {
+    "zero": 0,
+    "one" : 1,
+    "two" : 2,
+    "three" : 3,
+    "four" : 4,
+    "five" : 5,
+    "six" : 6,
+    "seven" : 7,
+    "eight" : 8,
+    "nine" : 9,
+}
 
 /**
- * Get the combined numerical value from a string
+ * Finds first and last numbers in a line, expressed as digits or spelled in English.
+ * Builds a number from them (first * 10 + last) and returns it.
  *
- * @param {string} str - input string to extract numerical values
- * @return {number} a combined numerical value
+ * @param {string} line - A line from the calibration document.
+ *
+ * @returns {number} - The calibration value of the line.
  */
-const getValue = str => {
-    const numMapping = {
-        'one': '1', 'two': '2', 'three': '3', 'four': '4', 'five': '5',
-        'six': '6', 'seven': '7', 'eight': '8', 'nine': '9'
-    };
+const extractNumber = (line) => {
+    const words = line.split(/(\D+)/);
 
-    let firstNum = '', lastNum = '', found = false;
+    const firstNumber = words.find(word => word.match(/(\d+)|zero|one|two|three|four|five|six|seven|eight|nine/));
+    const lastNumber = words.reverse().find(word => word.match(/(\d+)|zero|one|two|three|four|five|six|seven|eight|nine/));
 
-    // Iterate over the mapping and find numbers in the form of text
-    for (const key in numMapping) {
-        if (!str.includes(key)) continue;
+    const firstDigit = isNaN(Number(firstNumber)) ? numberTerms[firstNumber] : Number(firstNumber);
+    const lastDigit = isNaN(Number(lastNumber)) ? numberTerms[lastNumber] : Number(lastNumber);
 
-        // Replace text numbers with actual numbers
-        str = str.replace(new RegExp(key, 'g'), numMapping[key]);
-    }
-
-    // Find first and last digits
-    for (let i = 0; i < str.length; i++) {
-        if (!firstNum && /\d/.test(str[i])) {
-            firstNum = str[i];
-        }
-
-        if (/\d/.test(str[i])) {
-            lastNum = str[i];
-            found = true;
-        }
-    }
-
-    return found ? parseInt(firstNum + lastNum) : 0;
-};
+    return firstDigit * 10 + lastDigit;
+}
 
 /**
- * Main function to solve the problem
+ * Sums up all the calibration values in the document.
  *
- * @return {Promise<number>} a promise that resolves with the sum of calibration values
+ * @param {string} document - The calibration document.
+ *
+ * @returns {number} - Sum of all calibration values.
  */
-async function main() {
-    const data = await fs.readFile('./input.txt', 'utf-8');
-    const lines = data.split('\n');
+const main = (document) => {
 
-    return lines.reduce((acc, line) => acc + getValue(line.trim()), 0);
+    const lines = document.split('\n');
+
+    return lines.reduce((sum, line) => sum + extractNumber(line), 0);
 }
 
 export default main;

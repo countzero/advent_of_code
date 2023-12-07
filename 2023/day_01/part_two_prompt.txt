@@ -9,6 +9,23 @@ Adhere strictly to the following rules:
 7. Every JavaScript function must have a valid and complete JSDoc comment.
 8. Do not give any explanation outside the code block.
 
+The program must fulfill the following unit test:
+
+```JavaScript
+assert.deepEqual(
+    await main(
+`two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen`
+    ),
+    281
+)
+```
+
 Write a concise program that solves the last part of the following task:
 
 ```
