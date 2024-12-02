@@ -1,26 +1,36 @@
+// @ts-check
+
 /**
- * Checks if the array is non-increasing.
- * @param {number[]} levels - The array of levels.
- * @returns {boolean} True if the array is non-increasing, false otherwise.
+ * Checks if a report is safe.
+ * @param {number[]} levels - The levels to check.
+ * @returns {boolean} - True if the report is safe, false otherwise.
  */
-function isNonIncreasing(levels) {
-    for (let i = 0; i < levels.length - 1; i++) {
-        if (levels[i] < levels[i + 1]) {
-            return false;
+function isSafe(levels) {
+    const n = levels.length;
+    let isIncreasing = true, isDecreasing = true;
+
+    for (let i = 1; i < n; i++) {
+        const diff = levels[i] - levels[i - 1];
+        if (diff < 1 || diff > 3) {
+            isIncreasing = false;
+        }
+        if (-diff < 1 || -diff > 3) {
+            isDecreasing = false;
         }
     }
-    return true;
+    return isIncreasing || isDecreasing;
 }
 
 /**
- * Checks if the array can be made non-increasing by removing one element.
- * @param {number[]} levels - The array of levels.
- * @returns {boolean} True if the array can be made non-increasing by removing one element, false otherwise.
+ * Checks if a report can be made safe by removing one level.
+ * @param {number[]} levels - The levels to check.
+ * @returns {boolean} - True if the report can be made safe by removing one level, false otherwise.
  */
-function canBecomeNonIncreasingByRemovingOne(levels) {
-    for (let i = 0; i < levels.length; i++) {
-        const modified = levels.slice(0, i).concat(levels.slice(i + 1));
-        if (isNonIncreasing(modified)) {
+function canBeMadeSafe(levels) {
+    const n = levels.length;
+    for (let i = 0; i < n; i++) {
+        const filteredLevels = levels.slice(0, i).concat(levels.slice(i + 1));
+        if (isSafe(filteredLevels)) {
             return true;
         }
     }
@@ -28,18 +38,19 @@ function canBecomeNonIncreasingByRemovingOne(levels) {
 }
 
 /**
- * Main function to count the number of safe reports.
- * @param {string} input - UTF-8 encoded string containing reports.
- * @returns {Promise<number>} The number of safe reports.
+ * Analyzes the unusual data and returns the number of safe reports.
+ * @param {string} input - The input to analyze.
+ * @returns {number} - The number of safe reports.
  */
-export default async function main(input) {
-    const reports = input.trim().split('\n');
-    let count = 0;
+export default function main(input) {
+    const reports = input.trim().split('\n').map(line => line.split(' ').map(Number));
+    let safeCount = 0;
+
     for (const report of reports) {
-        const levels = report.split(' ').map(Number);
-        if (isNonIncreasing(levels) || canBecomeNonIncreasingByRemovingOne(levels)) {
-            count++;
+        if (isSafe(report) || canBeMadeSafe(report)) {
+            safeCount++;
         }
     }
-    return count;
+
+    return safeCount;
 }
